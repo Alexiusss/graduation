@@ -1,6 +1,5 @@
 package ru.voting_system.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -9,7 +8,7 @@ import ru.voting_system.repository.UserRepository;
 
 import java.util.List;
 
-import static ru.voting_system.util.ValidationUtil.*;
+import static ru.voting_system.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class UserService {

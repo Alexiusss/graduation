@@ -1,4 +1,4 @@
-package ru.voting_system;
+package ru.voting_system.TestData;
 
 import ru.voting_system.model.Role;
 import ru.voting_system.model.User;
@@ -38,4 +38,5 @@ public class UserTestData {
     public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "roles", "votes").isEqualTo(expected);
     }
+
 }

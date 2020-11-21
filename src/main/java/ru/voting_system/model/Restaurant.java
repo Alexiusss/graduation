@@ -13,14 +13,12 @@ public class Restaurant extends AbstractNamedEntity{
     public Restaurant() {
     }
 
-    public Restaurant( String name, Set<Dish> dishes) {
+    public Restaurant( String name) {
         super(null, name);
-        this.dishes = dishes;
     }
 
     public Restaurant(Integer id, String name) {
         super(id, name);
-
     }
 
     public Restaurant(Restaurant restaurant) {
