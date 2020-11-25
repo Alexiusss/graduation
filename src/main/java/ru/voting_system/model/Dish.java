@@ -43,7 +43,6 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
     }
 
-
     public LocalDate getDate() {
         return date;
     }
@@ -73,7 +72,6 @@ public class Dish extends AbstractNamedEntity {
         return "Dish{" +
                 "date=" + date +
                 ", price=" + price +
-                ", restaurant=" + restaurant +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';

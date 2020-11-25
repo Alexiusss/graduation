@@ -26,8 +26,8 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void delete() {
-        service.delete(RESTAURANT_1_ID);
-        service.get(RESTAURANT_1_ID);
+        service.delete(RESTAURANT_ID);
+        service.get(RESTAURANT_ID);
     }
 
     @Test(expected = NotFoundException.class)
@@ -37,7 +37,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     public void get() {
-        Restaurant restaurant = service.get(RESTAURANT_1_ID);
+        Restaurant restaurant = service.get(RESTAURANT_ID);
         assertMatch(restaurant, RESTAURANT_1);
     }
 
@@ -62,6 +62,6 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     public void update() {
         Restaurant updated = getUpdated();
         service.update(updated);
-        assertMatch(service.get(RESTAURANT_1_ID), updated);
+        assertMatch(service.get(RESTAURANT_ID), updated);
     }
 }

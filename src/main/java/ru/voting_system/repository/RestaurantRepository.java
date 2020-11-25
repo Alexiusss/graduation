@@ -18,4 +18,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     int delete(@Param("id") int id);
 
     Restaurant getByName(String name);
+
 }
