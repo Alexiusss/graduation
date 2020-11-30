@@ -41,7 +41,7 @@ public class UserService {
         return repository.findAll(SORT_NAME_EMAIL);
     }
 
-    public void update(User user){
+    public void update(User user) {
         Assert.notNull(user, "user must not be null");
         checkNotFoundWithId(repository.save(user), user.getId());
     }

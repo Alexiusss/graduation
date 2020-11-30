@@ -17,17 +17,17 @@ public class UserTestData {
     public static final User USER = new User(USER_ID, "User", "user@yandex.ru", "password", Role.ROLE_USER);
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN);
 
-    public static User getNew(){
+    public static User getNew() {
         return new User(null, "New", "new@yandex.ru", "newPass", true, new Date(), Collections.singleton(Role.ROLE_USER));
     }
 
-    public  static User getUpdated(){
+    public static User getUpdated() {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         return updated;
     }
 
-    public static void assertMatch(User actual, User expected){
+    public static void assertMatch(User actual, User expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "roles", "votes");
     }
 
