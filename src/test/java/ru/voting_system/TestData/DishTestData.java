@@ -1,15 +1,13 @@
 package ru.voting_system.TestData;
 
-import ru.voting_system.model.AbstractBaseEntity;
 import ru.voting_system.model.Dish;
-import ru.voting_system.service.DishService;
 
 import java.time.Month;
 import java.util.List;
 
+import static java.time.LocalDate.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.voting_system.model.AbstractBaseEntity.START_SEQ;
-import static java.time.LocalDate.of;
 
 public class DishTestData {
     public static final int DISH1_ID = START_SEQ + 11;

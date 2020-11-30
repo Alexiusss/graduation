@@ -4,14 +4,13 @@ import com.sun.istack.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.voting_system.model.Dish;
-import ru.voting_system.model.Restaurant;
 import ru.voting_system.repository.DishRepository;
 import ru.voting_system.repository.RestaurantRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.voting_system.util.ValidationUtil.*;
+import static ru.voting_system.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class DishService {

@@ -67,7 +67,6 @@ public class DishServiceTest extends AbstractServiceTest{
         Dish updated = getUpdated();
         service.update(updated, RESTAURANT_ID);
         assertMatch(service.get(DISH1_ID, RESTAURANT_ID), updated);
-
     }
 
     @Test(expected = NotFoundException.class)
@@ -76,7 +75,7 @@ public class DishServiceTest extends AbstractServiceTest{
     }
 
     @Test(expected = NotFoundException.class)
-    public void uodateNotOwn() throws Exception {
+    public void updateNotOwn() throws Exception {
         service.get(DISH1_ID, RESTAURANT_ID+1);
     }
 
