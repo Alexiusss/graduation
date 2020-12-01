@@ -24,14 +24,16 @@ public class RestaurantServiceTest extends AbstractServiceTest {
         assertMatch(service.get(newId), newRestaurant);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void delete() {
+        thrown.expect(NotFoundException.class);
         service.delete(RESTAURANT_ID);
         service.get(RESTAURANT_ID);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deletedNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.delete(1);
     }
 
@@ -41,8 +43,9 @@ public class RestaurantServiceTest extends AbstractServiceTest {
         assertMatch(restaurant, RESTAURANT_1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() {
+        thrown.expect(NotFoundException.class);
         service.get(1);
     }
 

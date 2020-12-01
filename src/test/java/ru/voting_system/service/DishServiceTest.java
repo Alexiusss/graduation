@@ -25,19 +25,22 @@ public class DishServiceTest extends AbstractServiceTest{
         assertMatch(service.get(newId, RESTAURANT_ID), newDish);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void delete() {
+        thrown.expect(NotFoundException.class);
         service.delete(DISH1_ID, RESTAURANT_ID);
         service.get(DISH1_ID, RESTAURANT_ID);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deletedNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.delete(1, 11);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deleteNotOwn() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.delete(DISH1_ID, RESTAURANT_ID+1);
     }
 
@@ -47,13 +50,15 @@ public class DishServiceTest extends AbstractServiceTest{
         assertMatch(actual, DISH_1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() {
+        thrown.expect(NotFoundException.class);
         service.get(1, 11);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotOwn() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.get(DISH1_ID, RESTAURANT_ID+1);
     }
 
@@ -69,13 +74,15 @@ public class DishServiceTest extends AbstractServiceTest{
         assertMatch(service.get(DISH1_ID, RESTAURANT_ID), updated);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void updateNotFound() {
+        thrown.expect(NotFoundException.class);
         service.update(DISH_1, RESTAURANT_ID+1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void updateNotOwn() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.get(DISH1_ID, RESTAURANT_ID+1);
     }
 

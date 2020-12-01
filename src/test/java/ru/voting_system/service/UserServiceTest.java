@@ -24,14 +24,16 @@ public class UserServiceTest extends AbstractServiceTest {
         assertMatch(service.get(newId), newUser);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void delete() {
+        thrown.expect(NotFoundException.class);
         service.delete(USER_ID);
         service.get(USER_ID);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deletedNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
         service.delete(1);
     }
 
@@ -41,8 +43,9 @@ public class UserServiceTest extends AbstractServiceTest {
         assertMatch(user, USER);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound(){
+        thrown.expect(NotFoundException.class);
         service.get(1);
     }
 
