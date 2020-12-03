@@ -1,5 +1,7 @@
 package ru.voting_system.service;
 
+import org.junit.Before;
+import org.springframework.cache.CacheManager;
 import ru.voting_system.model.User;
 import ru.voting_system.util.exception.NotFoundException;
 import org.junit.Test;
@@ -13,6 +15,14 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     protected UserService service;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before
+    public void setUp() throws Exception {
+        cacheManager.getCache("users").clear();
+    }
 
     @Test
     public void create() {
@@ -44,7 +54,7 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getNotFound(){
+    public void getNotFound() {
         thrown.expect(NotFoundException.class);
         service.get(1);
     }
@@ -56,7 +66,7 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void update(){
+    public void update() {
         User updated = getUpdated();
         service.update(updated);
         assertMatch(service.get(USER_ID), updated);
