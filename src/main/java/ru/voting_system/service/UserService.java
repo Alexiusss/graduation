@@ -41,6 +41,10 @@ public class UserService {
         return repository.getByEmail(email);
     }
 
+    public User getWithVotes(int id){
+        return checkNotFoundWithId(repository.getWithVotes(id), id);
+    }
+
     @Cacheable("users")
     public List<User> getAll() {
         return repository.findAll(SORT_NAME_EMAIL);

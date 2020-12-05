@@ -1,6 +1,7 @@
 package ru.voting_system.model;
 
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.lang.NonNull;
 import org.springframework.util.CollectionUtils;
 
@@ -36,10 +37,12 @@ public class User extends AbstractNamedEntity {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
+    @BatchSize(size = 200)
     private Set<Role> roles;
 
-   // @OneToMany(mappedBy = "user")
-    //private List<Vote> votes;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OrderBy("date DESC")
+    private List<Vote> votes;
 
     public User() {
     }
@@ -51,7 +54,6 @@ public class User extends AbstractNamedEntity {
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, true, new Date(), EnumSet.of(role, roles));
     }
-
 
     public User(Integer id, String name, String email, String password, boolean enabled, Date registered, Collection<Role> roles) {
         super(id, name);
@@ -100,6 +102,10 @@ public class User extends AbstractNamedEntity {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
     }
 
     @Override

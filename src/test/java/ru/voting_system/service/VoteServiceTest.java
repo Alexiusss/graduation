@@ -13,13 +13,13 @@ import static ru.voting_system.TestData.VoteTestData.*;
 public class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
-    VoteService service;
+    protected VoteService service;
 
     @Autowired
-    RestaurantService restaurantService;
+    protected RestaurantService restaurantService;
 
     @Autowired
-    UserService userService;
+    protected UserService userService;
 
     @Test
     public void vote() throws Exception {

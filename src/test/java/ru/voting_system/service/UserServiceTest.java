@@ -2,6 +2,7 @@ package ru.voting_system.service;
 
 import org.junit.Before;
 import org.springframework.cache.CacheManager;
+import ru.voting_system.TestData.VoteTestData;
 import ru.voting_system.model.User;
 import ru.voting_system.util.exception.NotFoundException;
 import org.junit.Test;
@@ -76,5 +77,18 @@ public class UserServiceTest extends AbstractServiceTest {
     public void getAll() {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);
+    }
+
+    @Test
+    public void getWithVotes(){
+        User user = service.getWithVotes(USER_ID);
+        assertMatch(user, USER);
+        VoteTestData.assertMatch(user.getVotes(), VoteTestData.VOTES);
+    }
+
+    @Test
+    public void getWithVotesNotFound(){
+        thrown.expect(NotFoundException.class);
+        service.getWithVotes(1);
     }
 }

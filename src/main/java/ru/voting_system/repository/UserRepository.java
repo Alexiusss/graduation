@@ -7,6 +7,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.voting_system.model.User;
+import ru.voting_system.model.Vote;
+
+import java.util.List;
 
 @Repository
 @Transactional(readOnly = true)
@@ -18,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     int delete(@Param("id") int id);
 
     User getByEmail(String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.votes WHERE u.id=:id")
+    User getWithVotes(@Param("id") int id);
 }
