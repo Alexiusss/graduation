@@ -1,9 +1,5 @@
 <configuration>
 
-    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
-        <resetJul>true</resetJul>
-    </contextListener>
-
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
@@ -17,10 +13,12 @@
             <pattern>%magenta(%msg%n)</pattern>
         </encoder>
     </appender>
-
-    <logger name="result" level="INFO" addivity="false">
-        <appender ref="result"/>
+    <logger name="result" level="INFO" additivity="false">
+        <appender-ref ref="result"/>
     </logger>
+
+<!--    <logger name="org.postgresql" level="debug"/>-->
+<!--    <logger name="org.springframework.jdbc" level="debug"/>-->
 
     <logger name="ru.voting_system" level="debug"/>
 

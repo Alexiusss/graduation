@@ -7,6 +7,8 @@ import ru.voting_system.util.exception.NotFoundException;
 
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import static ru.voting_system.TestData.RestaurantTestData.*;
 
 public class RestaurantServiceTest extends AbstractServiceTest {
@@ -66,5 +68,11 @@ public class RestaurantServiceTest extends AbstractServiceTest {
         Restaurant updated = getUpdated();
         service.update(updated);
         assertMatch(service.get(RESTAURANT_ID), updated);
+    }
+
+    @Test
+    public void createWithException() throws Exception {
+        validationRootCause(()->service.create(new Restaurant(null, " ")), ConstraintViolationException.class);
+        validationRootCause(()->service.create(new Restaurant(null, "r")), ConstraintViolationException.class);
     }
 }

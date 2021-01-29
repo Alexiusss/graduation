@@ -3,12 +3,18 @@ package ru.voting_system.service;
 import org.junit.Before;
 import org.springframework.cache.CacheManager;
 import ru.voting_system.TestData.VoteTestData;
+import ru.voting_system.model.Role;
 import ru.voting_system.model.User;
 import ru.voting_system.util.exception.NotFoundException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolationException;
 
 import static ru.voting_system.TestData.UserTestData.*;
 
@@ -90,5 +96,13 @@ public class UserServiceTest extends AbstractServiceTest {
     public void getWithVotesNotFound(){
         thrown.expect(NotFoundException.class);
         service.getWithVotes(1);
+    }
+
+    @Test
+    public void createWithException() throws Exception {
+        validationRootCause(()->service.create(new User(USER_ID, "  ", "user@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validationRootCause(()->service.create(new User(USER_ID, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validationRootCause(()->service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "  ", Role.ROLE_ADMIN)), ConstraintViolationException.class);
+        validationRootCause(()->service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "pass", false, new Date(), Set.of())), ConstraintViolationException.class);
     }
 }

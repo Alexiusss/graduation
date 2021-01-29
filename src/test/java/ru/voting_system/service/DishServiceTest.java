@@ -2,15 +2,19 @@ package ru.voting_system.service;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.voting_system.TestData.RestaurantTestData;
 import ru.voting_system.model.Dish;
 import ru.voting_system.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
 
-import static ru.voting_system.TestData.DishTestData.*;
+import javax.validation.ConstraintViolationException;
 
-public class DishServiceTest extends AbstractServiceTest{
+import static ru.voting_system.TestData.DishTestData.*;
+import static java.time.LocalDate.of;
+
+public class DishServiceTest extends AbstractServiceTest {
 
     @Autowired
     DishService service;
@@ -41,7 +45,7 @@ public class DishServiceTest extends AbstractServiceTest{
     @Test
     public void deleteNotOwn() throws Exception {
         thrown.expect(NotFoundException.class);
-        service.delete(DISH1_ID, RESTAURANT_ID+1);
+        service.delete(DISH1_ID, RESTAURANT_ID + 1);
     }
 
     @Test
@@ -59,7 +63,7 @@ public class DishServiceTest extends AbstractServiceTest{
     @Test
     public void getNotOwn() throws Exception {
         thrown.expect(NotFoundException.class);
-        service.get(DISH1_ID, RESTAURANT_ID+1);
+        service.get(DISH1_ID, RESTAURANT_ID + 1);
     }
 
     @Test
@@ -77,17 +81,25 @@ public class DishServiceTest extends AbstractServiceTest{
     @Test
     public void updateNotFound() {
         thrown.expect(NotFoundException.class);
-        service.update(DISH_1, RESTAURANT_ID+1);
+        service.update(DISH_1, RESTAURANT_ID + 1);
     }
 
     @Test
     public void updateNotOwn() throws Exception {
         thrown.expect(NotFoundException.class);
-        service.get(DISH1_ID, RESTAURANT_ID+1);
+        service.get(DISH1_ID, RESTAURANT_ID + 1);
     }
 
     @Test
     public void getByDate() {
         assertMatch(service.getByDate(LocalDate.of(2020, Month.SEPTEMBER, 12), RESTAURANT_ID), DISH_3, DISH_2, DISH_1);
+    }
+
+    @Test
+    public void createWithException() throws Exception {
+        validationRootCause(() -> service.create(new Dish(null, "  ", of(2021, Month.JANUARY, 27), 133, RestaurantTestData.RESTAURANT_2), RESTAURANT_ID), ConstraintViolationException.class);
+        validationRootCause(() -> service.create(new Dish(null, "New Dish", of(2021, Month.JANUARY, 27), 0, RestaurantTestData.RESTAURANT_2), RESTAURANT_ID), ConstraintViolationException.class);
+        validationRootCause(() -> service.create(new Dish(null, "New Dish", of(2021, Month.JANUARY, 27), -11, RestaurantTestData.RESTAURANT_2), RESTAURANT_ID), ConstraintViolationException.class);
+        validationRootCause(() -> service.create(new Dish(null, "New Dish", null, 155, null), RESTAURANT_ID), ConstraintViolationException.class);
     }
 }
