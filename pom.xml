@@ -114,6 +114,13 @@
             <version>${hibernate-validator.version}</version>
         </dependency>
 
+        <!-- Hibernate 2nd level cache-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
         <!--http://hibernate.org/validator/documentation/getting-started/#unified-expression-language-el-->
         <dependency>
             <groupId>org.glassfish</groupId>

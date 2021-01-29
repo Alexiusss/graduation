@@ -5,6 +5,7 @@ import org.springframework.cache.CacheManager;
 import ru.voting_system.TestData.VoteTestData;
 import ru.voting_system.model.Role;
 import ru.voting_system.model.User;
+import ru.voting_system.repository.JpaUtil;
 import ru.voting_system.util.exception.NotFoundException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import static ru.voting_system.TestData.UserTestData.*;
 public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
+    JpaUtil jpaUtil;
+
+    @Autowired
     protected UserService service;
 
     @Autowired
@@ -29,6 +33,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Before
     public void setUp() throws Exception {
         cacheManager.getCache("users").clear();
+        jpaUtil.clear2ndLevelHibernateCache();
     }
 
     @Test
