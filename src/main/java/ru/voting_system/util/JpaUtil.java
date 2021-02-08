@@ -1,4 +1,4 @@
-package ru.voting_system.repository;
+package ru.voting_system.util;
 
 import org.ehcache.core.spi.service.ServiceFactory;
 import org.hibernate.Session;

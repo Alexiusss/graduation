@@ -29,12 +29,12 @@ public class User extends AbstractNamedEntity {
     @Size(min = 5, max = 100)
     private String password;
 
-    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
-    private boolean enabled;
-
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NonNull
     private Date registered = new Date();
+
+    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
+    private boolean enabled;
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)

@@ -5,12 +5,11 @@ import org.springframework.cache.CacheManager;
 import ru.voting_system.TestData.VoteTestData;
 import ru.voting_system.model.Role;
 import ru.voting_system.model.User;
-import ru.voting_system.repository.JpaUtil;
+import ru.voting_system.util.JpaUtil;
 import ru.voting_system.util.exception.NotFoundException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
