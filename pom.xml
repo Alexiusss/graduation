@@ -15,12 +15,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <spring.version>5.2.0.RELEASE</spring.version>
-        <spring-data-jpa.version>2.2.0.RELEASE</spring-data-jpa.version>
+        <spring.version>5.2.6.RELEASE</spring.version>
+        <spring-data-jpa.version>2.4.2</spring-data-jpa.version>
+
+
+        <tomcat.version>9.0.36</tomcat.version>
 
         <!-- Logging -->
         <logback.version>1.2.3</logback.version>
-        <slf4j.version>1.7.28</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
 
         <!--DB-->
 
@@ -28,12 +31,12 @@
         <junit.version>4.12</junit.version>
 
         <!-- Hibernate -->
-        <hibernate.version>5.4.7.Final</hibernate.version>
-        <hibernate-validator.version>6.0.17.Final</hibernate-validator.version>
+        <hibernate.version>5.4.27.Final</hibernate.version>
+        <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b11</javax-el.version>
 
         <!--Tools-->
-        <ehcache.version>3.8.1</ehcache.version>
+        <ehcache.version>3.9.0</ehcache.version>
     </properties>
 
     <build>
@@ -133,7 +136,7 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.ehcache</groupId>
@@ -149,6 +152,17 @@
         </dependency>
 
         <!--Web-->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
 
         <!--Test-->
         <dependency>
@@ -166,7 +180,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.13.2</version>
+            <version>3.16.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

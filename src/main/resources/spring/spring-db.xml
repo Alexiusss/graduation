@@ -30,9 +30,28 @@
         <property name="password" value="${database.password}"/>
     </bean>
 
+<!--    <bean class="org.springframework.beans.factory.config.MethodInvokingBean">-->
+<!--        <property name="staticMethod" value="org.slf4j.bridge.SLF4JBridgeHandler.install" />-->
+<!--    </bean>-->
+
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="dataSource"
-          p:packagesToScan="ru.voting_system.model">
+          p:packagesToScan="ru.voting_system.**.model">
+
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}" value="${hibernate.format_sql}"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SQL_COMMENTS}" value="${hibernate.use_sql_comments}"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).JPA_PROXY_COMPLIANCE}" value="false"/>
+<!--                <entry key="#{T(org.hibernate.cfg.AvailableSettings).HBM2DDL_AUTO}" value="update"/>-->
+
+                <!--2nd level hibernate cache-->
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).CACHE_REGION_FACTORY}" value="org.hibernate.cache.jcache.internal.JCacheRegionFactory"/>
+                <entry key="#{T(org.hibernate.cache.jcache.ConfigSettings).PROVIDER}" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SECOND_LEVEL_CACHE}" value="true"/>
+                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_QUERY_CACHE}" value="false"/> <!--default-->
+            </map>
+        </property>
 
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
@@ -40,25 +59,19 @@
             </bean>
         </property>
 
-        <property name="jpaPropertyMap">
-            <map>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}" value="${hibernate.format_sql}"/>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SQL_COMMENTS}" value="${hibernate.use_sql_comments}"/>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).JPA_PROXY_COMPLIANCE}" value="false"/>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).HBM2DDL_AUTO}" value="update"/>
-
-                <!--2nd level hibernate cache-->
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).CACHE_REGION_FACTORY}" value="org.hibernate.cache.jcache.internal.JCacheRegionFactory"/>
-                <entry key="#{T(org.hibernate.cache.jcache.ConfigSettings).PROVIDER}" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
-                <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SECOND_LEVEL_CACHE}" value="true"/>
-            </map>
-        </property>
     </bean>
 
-    <bean class="ru.voting_system.repository.JpaUtil"/>
+    <bean class="ru.voting_system.util.JpaUtil"/>
 
     <tx:annotation-driven/>
+
+<!--     Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
           p:entityManagerFactory-ref="entityManagerFactory"/>
+
+<!--    <bean id="transactionManager"-->
+<!--          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+<!--        <property name="dataSource" ref="dataSource" />-->
+<!--    </bean>-->
 
 </beans>
