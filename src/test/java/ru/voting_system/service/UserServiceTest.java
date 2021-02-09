@@ -60,8 +60,8 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void get() {
-        User user = service.get(USER_ID);
-        assertMatch(user, USER);
+        User user = service.get(ADMIN_ID);
+        assertMatch(user, ADMIN);
     }
 
     @Test
@@ -72,8 +72,8 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void getByEmail() {
-        User user = service.getByEmail("user@yandex.ru");
-        assertMatch(user, USER);
+        User user = service.getByEmail("admin@gmail.com");
+        assertMatch(user, ADMIN);
     }
 
     @Test
@@ -90,23 +90,23 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getWithVotes(){
+    public void getWithVotes() {
         User user = service.getWithVotes(USER_ID);
         assertMatch(user, USER);
         VoteTestData.assertMatch(user.getVotes(), VoteTestData.VOTES);
     }
 
     @Test
-    public void getWithVotesNotFound(){
+    public void getWithVotesNotFound() {
         thrown.expect(NotFoundException.class);
         service.getWithVotes(1);
     }
 
     @Test
     public void createWithException() throws Exception {
-        validationRootCause(()->service.create(new User(USER_ID, "  ", "user@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-        validationRootCause(()->service.create(new User(USER_ID, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-        validationRootCause(()->service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "  ", Role.ROLE_ADMIN)), ConstraintViolationException.class);
-        validationRootCause(()->service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "pass", false, new Date(), Set.of())), ConstraintViolationException.class);
+        validationRootCause(() -> service.create(new User(USER_ID, "  ", "user@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validationRootCause(() -> service.create(new User(USER_ID, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validationRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "  ", Role.ROLE_ADMIN)), ConstraintViolationException.class);
+        validationRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "pass", false, new Date(), Set.of())), ConstraintViolationException.class);
     }
 }
