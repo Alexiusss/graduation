@@ -46,6 +46,7 @@ public class User extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
+    //@JsonIgnore
     private List<Vote> votes;
 
     public User() {

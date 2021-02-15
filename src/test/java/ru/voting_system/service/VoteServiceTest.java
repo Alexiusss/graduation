@@ -1,17 +1,13 @@
 package ru.voting_system.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.voting_system.model.Vote;
 
 import java.time.LocalDate;
 import java.time.Month;
 
-import javax.validation.ConstraintViolationException;
-
 import static ru.voting_system.TestData.DishTestData.RESTAURANT_ID;
-import static ru.voting_system.TestData.RestaurantTestData.RESTAURANT_2;
-import static ru.voting_system.TestData.UserTestData.USER;
 import static ru.voting_system.TestData.VoteTestData.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
