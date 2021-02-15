@@ -1,14 +1,14 @@
 package ru.voting_system.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.voting_system.model.Restaurant;
 import ru.voting_system.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-import javax.validation.ConstraintViolationException;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.voting_system.TestData.RestaurantTestData.*;
 
 public class RestaurantServiceTest extends AbstractServiceTest {
@@ -28,15 +28,15 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     public void delete() {
-        thrown.expect(NotFoundException.class);
         service.delete(RESTAURANT_ID);
-        service.get(RESTAURANT_ID);
+        assertThrows(NotFoundException.class, () ->
+                service.get(RESTAURANT_ID));
     }
 
     @Test
     public void deletedNotFound() throws Exception {
-        thrown.expect(NotFoundException.class);
-        service.delete(1);
+        assertThrows(NotFoundException.class, () ->
+                service.delete(RESTAURANT_ID + 10));
     }
 
     @Test
@@ -46,9 +46,9 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.get(1);
+    public void getNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.get(1));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     public void createWithException() throws Exception {
-        validationRootCause(()->service.create(new Restaurant(null, " ")), ConstraintViolationException.class);
-        validationRootCause(()->service.create(new Restaurant(null, "r")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant(null, " ")), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Restaurant(null, "r")), ConstraintViolationException.class);
     }
 }

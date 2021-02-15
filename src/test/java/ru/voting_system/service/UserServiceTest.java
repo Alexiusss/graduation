@@ -1,21 +1,23 @@
 package ru.voting_system.service;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.dao.DataAccessException;
 import ru.voting_system.TestData.VoteTestData;
 import ru.voting_system.model.Role;
 import ru.voting_system.model.User;
 import ru.voting_system.util.JpaUtil;
 import ru.voting_system.util.exception.NotFoundException;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.voting_system.TestData.UserTestData.*;
 
 public class UserServiceTest extends AbstractServiceTest {
@@ -29,9 +31,9 @@ public class UserServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
+        Objects.requireNonNull(cacheManager.getCache("users")).clear();
         jpaUtil.clear2ndLevelHibernateCache();
     }
 
@@ -46,16 +48,22 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void duplicateMailCreate() throws Exception {
+        assertThrows(DataAccessException.class, () ->
+                service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER)));
+    }
+
+    @Test
     public void delete() {
-        thrown.expect(NotFoundException.class);
         service.delete(USER_ID);
-        service.get(USER_ID);
+        assertThrows(NotFoundException.class, () ->
+                service.delete(USER_ID));
     }
 
     @Test
     public void deletedNotFound() throws Exception {
-        thrown.expect(NotFoundException.class);
-        service.delete(1);
+        assertThrows(NotFoundException.class, () ->
+                service.delete(1));
     }
 
     @Test
@@ -66,8 +74,8 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void getNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.get(1);
+        assertThrows(NotFoundException.class, () ->
+                service.get(1));
     }
 
     @Test
@@ -98,15 +106,15 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void getWithVotesNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.getWithVotes(1);
+        assertThrows(NotFoundException.class, () ->
+                service.getWithVotes(1));
     }
 
     @Test
     public void createWithException() throws Exception {
-        validationRootCause(() -> service.create(new User(USER_ID, "  ", "user@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-        validationRootCause(() -> service.create(new User(USER_ID, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-        validationRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "  ", Role.ROLE_ADMIN)), ConstraintViolationException.class);
-        validationRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "pass", false, new Date(), Set.of())), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(USER_ID, "  ", "user@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(USER_ID, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "  ", Role.ROLE_ADMIN)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "pass", false, new Date(), Set.of())), ConstraintViolationException.class);
     }
 }
