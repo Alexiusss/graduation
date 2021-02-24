@@ -1,5 +1,6 @@
 package ru.voting_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.OnDelete;
 import org.springframework.lang.NonNull;
 
@@ -28,6 +29,7 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = CASCADE)
     @NotNull
+    @JsonBackReference
     private Restaurant restaurant;
 
     public Vote() {

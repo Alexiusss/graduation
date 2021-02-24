@@ -7,7 +7,7 @@ import ru.voting_system.model.Vote;
 import java.time.LocalDate;
 import java.time.Month;
 
-import static ru.voting_system.TestData.DishTestData.RESTAURANT_ID;
+import static ru.voting_system.TestData.DishTestData.RESTAURANT_IDD;
 import static ru.voting_system.TestData.VoteTestData.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
@@ -24,7 +24,7 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     public void vote() throws Exception {
         Vote newVote = getNew();
-        Vote created = service.vote(RESTAURANT_ID, USER_ID);
+        Vote created = service.vote(RESTAURANT_IDD, USER_ID);
         Integer newID = created.getId();
         assertMatch(newVote, created);
         assertMatch(service.voteRepository.findById(newID).orElse(null), newVote);
@@ -38,8 +38,8 @@ public class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getAllByUserId() {
-        assertMatch(service.getAllByUserId(USER_ID), VOTES);
+    public void getAllByUserIdWithRestaurants() {
+        assertMatch(service.getAllByUserIdWithRestaurants(USER_ID), VOTES);
     }
 
     @Test

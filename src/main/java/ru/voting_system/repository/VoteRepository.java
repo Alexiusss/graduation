@@ -14,8 +14,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
-    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.date DESC")
-    List<Vote> getAllByUserId(@Param("userId") int userId);
+    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.user.id=:userId ORDER BY v.date DESC")
+    List<Vote> getAllByUserIdWithRestaurants(@Param("userId") int userId);
 
     Vote findByDateAndUserId(LocalDate date, int userId);
+
+    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.date=:date ORDER BY v.id")
+    List<Vote> getAllByDateWithRestaurants(@Param("date") LocalDate date);
 }

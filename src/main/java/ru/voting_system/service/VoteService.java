@@ -54,12 +54,17 @@ public class VoteService {
         return vote;
     }
 
-    public List<Vote> getAllByUserId(int userId) {
-        return voteRepository.getAllByUserId(userId);
+    public List<Vote> getAllByUserIdWithRestaurants(int userId) {
+        return voteRepository.getAllByUserIdWithRestaurants(userId);
     }
 
     public Vote getByUserIdAndDate(int userId, LocalDate date) {
         return checkNotFoundWithId(voteRepository.findByDateAndUserId(date, userId), userId);
     }
+
+    public List<Vote> getAllByDateWithRestaurants(LocalDate date) {
+        return voteRepository.getAllByDateWithRestaurants(date);
+    }
+
 
 }
