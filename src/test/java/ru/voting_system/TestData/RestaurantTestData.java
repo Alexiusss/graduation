@@ -1,11 +1,16 @@
 package ru.voting_system.TestData;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.voting_system.model.Restaurant;
+import ru.voting_system.to.RestaurantTo;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.voting_system.TestUtil.readFromJsonMvcResult;
+import static ru.voting_system.TestUtil.readListFromJsonMvcResult;
 import static ru.voting_system.model.AbstractBaseEntity.START_SEQ;
+
 
 public class RestaurantTestData {
 
@@ -30,15 +35,31 @@ public class RestaurantTestData {
     }
 
     public static void assertMatch(Restaurant actual, Restaurant expected){
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "dishes");
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "dishes", "votes");
     }
 
     public static void assertMatch(Iterable<Restaurant> actual, Restaurant... expected){
         assertMatch(actual, List.of(expected));
     }
 
-    public static void assertMatch(Iterable<Restaurant> actual, Iterable<Restaurant> excpected){
-        assertThat(actual).usingElementComparatorIgnoringFields("dishes").isEqualTo(excpected);
+    public static void assertMatch(Iterable<Restaurant> actual, Iterable<Restaurant> expected){
+        assertThat(actual).usingElementComparatorIgnoringFields("dishes", "votes").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJson(Restaurant... expected){
+        return result -> assertMatch(readListFromJsonMvcResult(result, Restaurant.class), List.of(expected));
+    }
+
+    public static ResultMatcher contentJson(Restaurant expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, Restaurant.class), expected);
+    }
+
+    public static ResultMatcher contentJsonTo(RestaurantTo expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, RestaurantTo.class), expected);
+    }
+
+    private static void assertMatch(RestaurantTo actual, RestaurantTo expected) {
+        assertThat(actual).isEqualTo(expected);
     }
 
 }

@@ -8,12 +8,12 @@ import ru.voting_system.model.User;
 import static ru.voting_system.web.SecurityUtil.authUserId;
 
 @RestController
-@RequestMapping(ProfileController.REST_URL)
+@RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController extends AbstractUserController{
 
-    static final String REST_URL = "/rest/profile";
+    static final String REST_URL = "/profile";
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public User get() {
         return super.get(authUserId());
     }

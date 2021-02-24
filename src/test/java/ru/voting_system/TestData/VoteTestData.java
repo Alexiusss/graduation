@@ -1,5 +1,6 @@
 package ru.voting_system.TestData;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.voting_system.model.Vote;
 
 import java.time.LocalDate;
@@ -11,10 +12,12 @@ import static ru.voting_system.TestData.RestaurantTestData.*;
 import static ru.voting_system.TestData.UserTestData.ADMIN;
 import static ru.voting_system.TestData.UserTestData.USER;
 import static ru.voting_system.model.AbstractBaseEntity.START_SEQ;
+import static ru.voting_system.TestUtil.readListFromJsonMvcResult;
 
 public class VoteTestData {
     public static final int VOTE1_ID = START_SEQ + 23;
     public static final int USER_ID = START_SEQ;
+    public static final int ADMIN_ID = START_SEQ+1;
 
     public static final Vote VOTE_1 = new Vote(VOTE1_ID, LocalDate.of(2020, Month.SEPTEMBER, 12), USER, RESTAURANT_1);
     public static final Vote VOTE_2 = new Vote(VOTE1_ID + 3, LocalDate.of(2020, Month.SEPTEMBER, 13), USER, RESTAURANT_2);
@@ -23,7 +26,6 @@ public class VoteTestData {
     public static final Vote VOTE_5 = new Vote(VOTE1_ID + 7, LocalDate.of(2020, Month.SEPTEMBER, 15), USER, RESTAURANT_4);
 
     public static final List<Vote> VOTES = List.of(VOTE_5, VOTE_4, VOTE_2, VOTE_1, VOTE_3);
-
 
     public static Vote getNew() {
         return new Vote(VOTE1_ID + 9, LocalDate.now(), USER, RESTAURANT_2);
@@ -43,6 +45,14 @@ public class VoteTestData {
 
     public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("user", "restaurant").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJson(Vote... expected) {
+        return contentJson(List.of(expected));
+    }
+
+    public static ResultMatcher contentJson(Iterable<Vote> expected) {
+        return result -> assertThat(readListFromJsonMvcResult(result, Vote.class)).isEqualTo(expected);
     }
 
 

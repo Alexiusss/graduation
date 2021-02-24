@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping(value = AdminController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController extends AbstractUserController {
 
-    static final String REST_URL = "/rest/admin/users";
+    static final String REST_URL = "/admin/users";
 
     @GetMapping
     public List<User> getAll() {
@@ -26,11 +26,6 @@ public class AdminController extends AbstractUserController {
     public User get(@PathVariable int id) {
         return super.get(id);
     }
-
-//    @GetMapping("/hello")
-//    ResponseEntity<String> hello() {
-//        return new ResponseEntity<>("Hello World!", HttpStatus.OK);
-//    }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@RequestBody User user) {
