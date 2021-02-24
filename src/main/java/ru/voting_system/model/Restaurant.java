@@ -1,19 +1,30 @@
 package ru.voting_system.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurant_unique_name_idx")})
-public class Restaurant extends AbstractNamedEntity{
+public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonManagedReference
+    @NotNull
     private Set<Dish> dishes;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonManagedReference
+    @NotNull
+    private List<Vote> votes;
 
     public Restaurant() {
     }
 
-    public Restaurant( String name) {
+    public Restaurant(String name) {
         super(null, name);
     }
 
@@ -33,10 +44,19 @@ public class Restaurant extends AbstractNamedEntity{
         this.dishes = dishes;
     }
 
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
                 "dishes=" + dishes +
+                ", votes=" + votes +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';

@@ -46,5 +46,13 @@ public class RestaurantService {
         checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
     }
 
+    public List<Restaurant> getAllWithVotes() {
+        return repository.getAllWithVotes();
+    }
+
+    public Restaurant getByIdWithVotes(int id) {
+        return repository.getByIdWithVotes(id);
+    }
+
 
 }
