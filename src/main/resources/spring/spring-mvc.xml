@@ -7,7 +7,7 @@
 
     <bean class="ru.voting_system.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <mvc:annotation-driven>
+    <mvc:annotation-driven conversion-service="conversionService">
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper" ref="objectMapper"/>
@@ -15,6 +15,14 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" id="conversionService">
+        <property name="formatters">
+            <set>
+                <bean class="ru.voting_system.web.converter.DateTimeFormatters.LocalDateFormatter"/>
+                <bean class="ru.voting_system.web.converter.DateTimeFormatters.LocalTimeFormatter"/>
+            </set>
+        </property>
+    </bean>
 
     <context:component-scan base-package="ru.voting_system.**.web"/>
 
