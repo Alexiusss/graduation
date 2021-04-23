@@ -17,7 +17,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     RestaurantService service;
 
     @Test
-    public void create() {
+    void create() {
         Restaurant newRestaurant = getNew();
         Restaurant created = service.create(newRestaurant);
         Integer newId = created.getId();
@@ -27,51 +27,51 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void delete() {
+    void delete() {
         service.delete(RESTAURANT_ID);
         assertThrows(NotFoundException.class, () ->
                 service.get(RESTAURANT_ID));
     }
 
     @Test
-    public void deletedNotFound() throws Exception {
+    void deletedNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
                 service.delete(RESTAURANT_ID + 10));
     }
 
     @Test
-    public void get() {
+    void get() {
         Restaurant restaurant = service.get(RESTAURANT_ID);
         assertMatch(restaurant, RESTAURANT_1);
     }
 
     @Test
-    public void getNotFound() throws Exception {
+    void getNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
                 service.get(1));
     }
 
     @Test
-    public void getByName() {
+    void getByName() {
         Restaurant restaurant = service.getByName("TOKIO-CITY");
         assertMatch(restaurant, RESTAURANT_1);
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         List<Restaurant> all = service.getAll();
         assertMatch(all, ALL_RESTS);
     }
 
     @Test
-    public void update() {
+    void update() {
         Restaurant updated = getUpdated();
         service.update(updated);
         assertMatch(service.get(RESTAURANT_ID), updated);
     }
 
     @Test
-    public void createWithException() throws Exception {
+    void createWithException() throws Exception {
         validateRootCause(() -> service.create(new Restaurant(null, " ")), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new Restaurant(null, "r")), ConstraintViolationException.class);
     }

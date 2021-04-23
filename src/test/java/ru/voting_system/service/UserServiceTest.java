@@ -32,13 +32,13 @@ public class UserServiceTest extends AbstractServiceTest {
     private CacheManager cacheManager;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         Objects.requireNonNull(cacheManager.getCache("users")).clear();
         jpaUtil.clear2ndLevelHibernateCache();
     }
 
     @Test
-    public void create() {
+    void create() {
         User newUser = getNew();
         User created = service.create(newUser);
         Integer newId = created.getId();
@@ -54,64 +54,64 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void delete() {
+    void delete() {
         service.delete(USER_ID);
         assertThrows(NotFoundException.class, () ->
                 service.delete(USER_ID));
     }
 
     @Test
-    public void deletedNotFound() throws Exception {
+    void deletedNotFound() throws Exception {
         assertThrows(NotFoundException.class, () ->
                 service.delete(1));
     }
 
     @Test
-    public void get() {
+    void get() {
         User user = service.get(ADMIN_ID);
         assertMatch(user, ADMIN);
     }
 
     @Test
-    public void getNotFound() {
+    void getNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.get(1));
     }
 
     @Test
-    public void getByEmail() {
+    void getByEmail() {
         User user = service.getByEmail("admin@gmail.com");
         assertMatch(user, ADMIN);
     }
 
     @Test
-    public void update() {
+    void update() {
         User updated = getUpdated();
         service.update(updated);
         assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);
     }
 
     @Test
-    public void getWithVotes() {
+    void getWithVotes() {
         User user = service.getWithVotes(USER_ID);
         assertMatch(user, USER);
         VoteTestData.assertMatch(user.getVotes(), VoteTestData.VOTES);
     }
 
     @Test
-    public void getWithVotesNotFound() {
+    void getWithVotesNotFound() {
         assertThrows(NotFoundException.class, () ->
                 service.getWithVotes(1));
     }
 
     @Test
-    public void createWithException() throws Exception {
+    void createWithException() throws Exception {
         validateRootCause(() -> service.create(new User(USER_ID, "  ", "user@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(USER_ID, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "  ", Role.ROLE_ADMIN)), ConstraintViolationException.class);
