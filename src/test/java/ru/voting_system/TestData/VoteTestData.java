@@ -28,7 +28,7 @@ public class VoteTestData {
     public static final List<Vote> VOTES = List.of(VOTE_5, VOTE_4, VOTE_2, VOTE_1, VOTE_3);
 
     public static Vote getNew() {
-        return new Vote(VOTE1_ID + 9, LocalDate.now(), USER, RESTAURANT_2);
+        return new Vote(null, LocalDate.now(), USER, RESTAURANT_2);
     }
 
     public static Vote getUpdated() {

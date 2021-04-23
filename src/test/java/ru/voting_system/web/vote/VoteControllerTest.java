@@ -8,15 +8,17 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.voting_system.model.Vote;
 import ru.voting_system.service.VoteService;
 import ru.voting_system.web.AbstractControllerTest;
-import ru.voting_system.web.json.JsonUtil;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.voting_system.TestData.VoteTestData.*;
 import static ru.voting_system.TestUtil.readFromJson;
+import static ru.voting_system.service.VoteService.TIME_LIMIT;
 
 
 class VoteControllerTest extends AbstractControllerTest {
@@ -47,8 +49,9 @@ class VoteControllerTest extends AbstractControllerTest {
     void createWithLocation() throws Exception {
         Vote newVote = getNew();
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(JsonUtil.writeValue(newVote)));
+                .param("restaurantId", String.valueOf(newVote.getRestaurant().getId())))
+                .andExpect(status().isCreated())
+                .andDo(print());
 
         Vote created = readFromJson(action, Vote.class);
         Integer newId = created.getId();
@@ -60,12 +63,19 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Vote updated = getUpdated();
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
+                .param("restaurantId", String.valueOf(updated.getRestaurant().getId())))
+                .andDo(print());
 
-        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + (VOTE1_ID + 8))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
-                .andExpect(status().isNoContent());
-
-        assertMatch(voteService.getByUserIdAndDate(ADMIN_ID, LocalDate.now()), updated);
+        if (LocalTime.now().isBefore(TIME_LIMIT)) {
+            action.andExpect(status().isCreated());
+            //assertMatch(voteService.getByUserIdAndDate(ADMIN_ID, LocalDate.now()), updated);
+            assertMatch(voteService.getByUserIdAndDate(USER_ID, LocalDate.now()), updated);
+        } else {
+            //https://www.baeldung.com/spring-mvc-test-exceptions
+            action
+                    .andExpect(status().isUnprocessableEntity())
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof ru.voting_system.util.exception.VoteTimeLimitException));
+        }
     }
 }
