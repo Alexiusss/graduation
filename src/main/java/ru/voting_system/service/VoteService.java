@@ -1,8 +1,8 @@
 package ru.voting_system.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.voting_system.model.Restaurant;
-import ru.voting_system.model.User;
 import ru.voting_system.model.Vote;
 import ru.voting_system.repository.RestaurantRepository;
 import ru.voting_system.repository.UserRepository;
@@ -30,28 +30,21 @@ public class VoteService {
         this.userRepository = userRepository;
     }
 
-    public Vote vote(int restaurantId, int userId) throws Exception {
-
+    @Transactional
+    public Vote vote(int restaurantId, int userId) {
         LocalDate today = LocalDate.now();
-
-        final Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        final User user = userRepository.findById(userId).orElse(null);
-
+        final Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         Vote vote;
-
         vote = voteRepository.findByDateAndUserId(today, userId);
 
-        if (vote == null) {
-            vote = new Vote(today, user, restaurant);
-            return voteRepository.save(vote);
-        }
-
-        if (LocalTime.now().isBefore(TIME_LIMIT)) {
+        if (vote != null) {
+            if (LocalTime.now().isAfter(TIME_LIMIT)) {
+                throw new VoteTimeLimitException(String.format("It`s too late, you can revote before %s", TIME_LIMIT));
+            }
             vote.setRestaurant(restaurant);
-        } else {
-            throw new VoteTimeLimitException(String.format("It`s too late, you can revote before %s", TIME_LIMIT));
-        }
-        return vote;
+            return vote;
+        } else
+            return voteRepository.save(new Vote(today, userRepository.getOne(userId), restaurant));
     }
 
     public List<Vote> getAllByUserIdWithRestaurants(int userId) {

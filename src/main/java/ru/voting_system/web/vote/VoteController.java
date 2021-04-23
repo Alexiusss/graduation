@@ -3,7 +3,6 @@ package ru.voting_system.web.vote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.voting_system.model.Vote;
 import ru.voting_system.service.VoteService;
+import ru.voting_system.web.SecurityUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -41,11 +41,12 @@ public class VoteController {
         return voteService.getAllByDateWithRestaurants(date);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Vote> vote(@RequestBody Vote vote) throws Exception {
-        log.info("vote for restaurant: {}", vote.getRestaurant().getId());
-        Vote created = voteService.vote(vote.getRestaurant().getId(), authUserId());
+    @PostMapping
+    public ResponseEntity<Vote> vote(@RequestParam int restaurantId) {
+        log.info("vote for restaurant: {}", restaurantId);
+        int userId = SecurityUtil.authUserId();
+        Vote created = voteService.vote(restaurantId, userId);
+
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
