@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.voting_system.model.User;
 import ru.voting_system.service.UserService;
+import ru.voting_system.to.UserTo;
+import ru.voting_system.util.UserUtil;
 
 import java.util.List;
 
@@ -27,10 +29,9 @@ public abstract class AbstractUserController {
         return service.get(id);
     }
 
-    public User create(User user) {
-        log.info("create {}", user);
-        checkNew(user);
-        return service.create(user);
+    public User create(UserTo userTo) {
+        log.info("create from To{}", userTo);
+        return service.create(UserUtil.createNewFromTo(userTo));
     }
 
     public void delete(int id) {
