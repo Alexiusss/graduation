@@ -1,13 +1,14 @@
 package ru.voting_system.model;
 
 import org.hibernate.Hibernate;
+import ru.voting_system.HasId;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
 //@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE, setterVisibility = NONE)
-public abstract class AbstractBaseEntity {
+public abstract class AbstractBaseEntity implements HasId {
     public static final int START_SEQ = 100000;
 
     @Id
@@ -26,6 +27,7 @@ public abstract class AbstractBaseEntity {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

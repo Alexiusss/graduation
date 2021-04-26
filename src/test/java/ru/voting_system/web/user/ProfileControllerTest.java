@@ -4,17 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.voting_system.TestData.UserTestData;
 import ru.voting_system.model.User;
 import ru.voting_system.service.UserService;
+import ru.voting_system.to.UserTo;
+import ru.voting_system.util.UserUtil;
 import ru.voting_system.web.AbstractControllerTest;
 import ru.voting_system.web.json.JsonUtil;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.voting_system.TestData.UserTestData.contentJson;
 import static ru.voting_system.TestData.UserTestData.*;
 import static ru.voting_system.web.user.ProfileController.REST_URL;
 
@@ -33,7 +32,7 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void delete() throws Exception{
+    void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isNoContent());
         assertMatch(userService.getAll(), ADMIN);
@@ -41,12 +40,12 @@ class ProfileControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        User updated = getUpdated();
+        UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
-        .content(JsonUtil.writeValue(updated)))
+                .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        assertMatch(userService.get(USER_ID), updated);
+        assertMatch(userService.get(USER_ID), UserUtil.updateFromTo(new User(USER), updatedTo));
     }
 }

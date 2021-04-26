@@ -4,9 +4,7 @@ import java.beans.ConstructorProperties;
 import java.util.Map;
 import java.util.Objects;
 
-public class RestaurantTo {
-
-    private final Integer id;
+public class RestaurantTo extends BaseTo {
 
     private final String name;
 
@@ -16,14 +14,10 @@ public class RestaurantTo {
 
     @ConstructorProperties({"id", "name", "dishes", "rating"})
     public RestaurantTo(Integer id, String name, Map<String, Integer> dishes, Integer rating) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.menu = dishes;
         this.rating = rating;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getName() {
@@ -47,7 +41,6 @@ public class RestaurantTo {
                 Objects.equals(name, that.name) &&
                 Objects.equals(menu, that.menu) &&
                 Objects.equals(rating, that.rating);
-
     }
 
     @Override

@@ -19,8 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.voting_system.TestData.RestaurantTestData.*;
+import static ru.voting_system.TestData.DishTestData.assertMatch;
+import static ru.voting_system.TestData.DishTestData.contentJson;
 import static ru.voting_system.TestData.DishTestData.*;
+import static ru.voting_system.TestData.RestaurantTestData.assertMatch;
+import static ru.voting_system.TestData.RestaurantTestData.contentJson;
+import static ru.voting_system.TestData.RestaurantTestData.*;
 import static ru.voting_system.TestUtil.readFromJson;
 
 class AdminRestaurantControllerTest extends AbstractControllerTest {
