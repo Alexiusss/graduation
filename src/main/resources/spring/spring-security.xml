@@ -6,10 +6,20 @@
 
     <http pattern="/resources/**" security="none"/>
 
-    <http pattern="/**" use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
-        <http-basic/>
-        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+    <!--        <http pattern="/**" use-expressions="true" name="restSecurityFilterChain" create-session="stateless">-->
+    <!--            <http-basic/>-->
+    <!--            <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>-->
+    <!--            <intercept-url pattern="/**" access="isAuthenticated()"/>-->
+    <!--            <csrf disabled="true"/>-->
+    <!--        </http>-->
+
+    <http>
+        <intercept-url pattern="/login" access="permitAll()"/>
+        <intercept-url pattern="/**/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
+        <form-login default-target-url="/profile/restaurants/menu"
+                    authentication-failure-url="/login?error=true"/>
+        <logout logout-success-url="/login"/>
         <csrf disabled="true"/>
     </http>
 
