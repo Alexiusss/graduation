@@ -1,15 +1,21 @@
 package ru.voting_system.to;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.util.Map;
 import java.util.Objects;
 
 public class RestaurantTo extends BaseTo {
 
+    @NotBlank
+    @Size(min = 2, max = 100)
     private final String name;
 
     private final Map<String, Integer> menu;
 
+    @Positive
     private final Integer rating;
 
     @ConstructorProperties({"id", "name", "dishes", "rating"})

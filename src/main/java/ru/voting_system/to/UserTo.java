@@ -1,11 +1,22 @@
 package ru.voting_system.to;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class UserTo extends BaseTo {
 
+    @NotBlank
+    @Size(min = 2, max = 100)
     private String name;
 
+    @Email
+    @NotBlank
+    @Size(max = 100)
     private String email;
 
+    @NotBlank
+    @Size(min = 8, max = 30, message = "length must be between 8 and 30 characters")
     private String password;
 
     public UserTo() {
