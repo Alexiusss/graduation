@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.voting_system.model.User;
-import ru.voting_system.to.UserTo;
 
 import java.net.URI;
 import java.util.List;
@@ -29,8 +28,8 @@ public class AdminController extends AbstractUserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> createWithLocation(@RequestBody UserTo userTo) {
-        User created = super.create(userTo);
+    public ResponseEntity<User> createWithLocation(@RequestBody User user) {
+        User created = super.create(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -47,8 +46,8 @@ public class AdminController extends AbstractUserController {
     @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo, @PathVariable int id) {
-        super.update(userTo, id);
+    public void update(@RequestBody User user, @PathVariable int id) {
+        super.update(user, id);
     }
 
     @Override

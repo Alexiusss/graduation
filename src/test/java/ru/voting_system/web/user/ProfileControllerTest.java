@@ -14,6 +14,7 @@ import ru.voting_system.web.json.JsonUtil;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.voting_system.TestUtil.userHttpBasic;
 import static ru.voting_system.TestData.UserTestData.*;
 import static ru.voting_system.web.user.ProfileController.REST_URL;
 
@@ -24,7 +25,8 @@ class ProfileControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -32,8 +34,15 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getUnAuth() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL))
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isNoContent());
         assertMatch(userService.getAll(), ADMIN);
     }
@@ -42,6 +51,7 @@ class ProfileControllerTest extends AbstractControllerTest {
     void update() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
