@@ -2,10 +2,16 @@ package ru.voting_system.service;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.voting_system.AuthorizedUser;
 import ru.voting_system.model.User;
 import ru.voting_system.repository.UserRepository;
 import ru.voting_system.to.UserTo;
@@ -15,8 +21,9 @@ import java.util.List;
 
 import static ru.voting_system.util.ValidationUtil.checkNotFoundWithId;
 
-@Service
-public class UserService {
+@Service("userService")
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class UserService implements UserDetailsService {
     public static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
     private final UserRepository repository;
 
@@ -72,5 +79,14 @@ public class UserService {
     public void enable(int id, boolean enable) {
         User user = get(id);
         user.setEnabled(enable);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.getByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " is not found");
+        }
+        return new AuthorizedUser(user);
     }
 }
