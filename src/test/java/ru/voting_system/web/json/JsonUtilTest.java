@@ -14,7 +14,7 @@ class JsonUtilTest {
         String json = JsonUtil.writeValue(VOTE_1);
         System.out.println(json);
         Vote vote = JsonUtil.readValue(json, Vote.class);
-        assertMatch(vote, VOTE_1);
+        VOTE_MATCHERS.assertMatch(vote, VOTE_1);
     }
 
     @Test
@@ -22,6 +22,6 @@ class JsonUtilTest {
         String json = JsonUtil.writeValue(VOTES);
         System.out.println(json);
         List<Vote> votes = JsonUtil.readValues(json, Vote.class);
-        assertMatch(votes, VOTES);
+        VOTE_MATCHERS.assertMatch(votes, VOTES);
     }
 }

@@ -2,7 +2,7 @@ package ru.voting_system.web.restaurant;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.voting_system.TestData.UserTestData;
 import ru.voting_system.web.AbstractControllerTest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -12,11 +12,13 @@ import static ru.voting_system.TestData.RestaurantTestData.RESTAURANT_2;
 
 class ProfileRestaurantControllerTest extends AbstractControllerTest {
 
-    static final String REST_URL = ProfileRestaurantController.REST_URL + "/";
+    public ProfileRestaurantControllerTest() {
+        super(ProfileRestaurantController.REST_URL);
+    }
 
     @Test
     void getAllWithMenu() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "menu"))
+                perform(doGet("menu").basicAuth(UserTestData.USER))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
@@ -26,7 +28,7 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getByIdWithMenu() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT_2.getId() + "/menu"))
+                perform(doGet(RESTAURANT_2.getId() + "/menu").basicAuth(UserTestData.USER))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));

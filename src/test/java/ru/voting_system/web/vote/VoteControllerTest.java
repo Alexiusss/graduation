@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.voting_system.TestData.UserTestData;
+import ru.voting_system.TestData.VoteTestData;
 import ru.voting_system.model.Vote;
 import ru.voting_system.service.VoteService;
 import ru.voting_system.web.AbstractControllerTest;
@@ -23,23 +24,25 @@ import static ru.voting_system.service.VoteService.TIME_LIMIT;
 
 class VoteControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = VoteController.REST_URL + "/";
-
     @Autowired
     VoteService voteService;
 
+    public VoteControllerTest() {
+        super(VoteController.REST_URL);
+    }
+
     @Test
     void getAllWithRestaurants() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(doGet().basicAuth(UserTestData.USER))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(VOTES));
+                .andExpect(VOTE_MATCHERS.contentJson(VOTES));
     }
 
     @Test
     void getByDate() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "filter?date=" + VOTE_2.getDate()))
+        perform(doGet("filter?date=" + VOTE_2.getDate()).basicAuth(UserTestData.USER))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
@@ -47,8 +50,8 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Vote newVote = getNew();
-        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
+        Vote newVote = VoteTestData.getNew();
+        ResultActions action = perform(doPost().basicAuth(UserTestData.USER).unwrap()
                 .param("restaurantId", String.valueOf(newVote.getRestaurant().getId())))
                 .andExpect(status().isCreated())
                 .andDo(print());
@@ -56,21 +59,20 @@ class VoteControllerTest extends AbstractControllerTest {
         Vote created = readFromJson(action, Vote.class);
         Integer newId = created.getId();
         newVote.setId(newId);
-        assertMatch(created, newVote);
-        assertMatch(voteService.getByUserIdAndDate(USER_ID, LocalDate.now()), newVote);
+        VOTE_MATCHERS.assertMatch(created, newVote);
+        VOTE_MATCHERS.assertMatch(voteService.getByUserIdAndDate(UserTestData.USER_ID, LocalDate.now()), newVote);
     }
 
     @Test
     void update() throws Exception {
-        Vote updated = getUpdated();
-        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
+        Vote updated = VoteTestData.getUpdated();
+        ResultActions action = perform(doPost().basicAuth(UserTestData.USER).unwrap()
                 .param("restaurantId", String.valueOf(updated.getRestaurant().getId())))
                 .andDo(print());
 
         if (LocalTime.now().isBefore(TIME_LIMIT)) {
             action.andExpect(status().isCreated());
-            //assertMatch(voteService.getByUserIdAndDate(ADMIN_ID, LocalDate.now()), updated);
-            assertMatch(voteService.getByUserIdAndDate(USER_ID, LocalDate.now()), updated);
+            VOTE_MATCHERS.assertMatch(voteService.getByUserIdAndDate(UserTestData.USER_ID, LocalDate.now()), updated);
         } else {
             //https://www.baeldung.com/spring-mvc-test-exceptions
             action

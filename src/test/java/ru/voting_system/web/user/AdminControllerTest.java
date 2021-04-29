@@ -4,12 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.voting_system.model.User;
 import ru.voting_system.service.UserService;
 import ru.voting_system.util.exception.NotFoundException;
 import ru.voting_system.web.AbstractControllerTest;
-import ru.voting_system.web.json.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,39 +16,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.voting_system.TestData.UserTestData.*;
 import static ru.voting_system.TestUtil.readFromJson;
-import static ru.voting_system.TestUtil.userHttpBasic;
 
 class AdminControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = AdminController.REST_URL + '/';
-
-    @Autowired
+       @Autowired
     UserService userService;
+
+    public AdminControllerTest() {
+        super(AdminController.REST_URL);
+    }
 
     @Test
     void get() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID)
-                .with(userHttpBasic(ADMIN)))
+        perform(doGet(ADMIN_ID).basicAuth(ADMIN))
                 .andExpect(status().isOk())
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(ADMIN));
+                .andExpect(USER_MATCHERS.contentJson(ADMIN));
     }
 
     @Test
     void getByEmail() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "by?email=" + USER.getEmail())
-                .with(userHttpBasic(ADMIN)))
+       perform(doGet("by?email={email}", ADMIN.getEmail()).basicAuth(ADMIN))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(USER));
+                .andExpect(USER_MATCHERS.contentJson(ADMIN));
     }
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + USER_ID)
-                .with(userHttpBasic(ADMIN)))
+        perform(doDelete(USER_ID).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> userService.get(USER_ID));
@@ -58,60 +54,51 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnAuth() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(doGet())
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void getForbidden() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
-                .with(userHttpBasic(USER)))
+        perform(doGet().basicAuth(USER))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void update() throws Exception {
         User updated = getUpdated();
-        mockMvc.perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(updated)))
+        perform(doPut(USER_ID).jsonBody(updated).basicAuth(ADMIN))
                 .andExpect(status().isNoContent());
 
-        assertMatch(userService.get(USER_ID), updated);
+        USER_MATCHERS.assertMatch(userService.get(USER_ID), updated);
     }
 
     @Test
     void createWithLocation() throws Exception {
         User newUser = getNew();
-        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(newUser)))
+        ResultActions action = perform(doPost().jsonBody(newUser).basicAuth(ADMIN))
                 .andExpect(status().isCreated());
 
         User created = readFromJson(action, User.class);
         Integer newId = created.getId();
         newUser.setId(newId);
-        assertMatch(created, newUser);
-        assertMatch(userService.get(newId), newUser);
+        USER_MATCHERS.assertMatch(created, newUser);
+        USER_MATCHERS.assertMatch(userService.get(newId), newUser);
     }
 
 
     @Test
     void getAll() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL)
-                .with(userHttpBasic(ADMIN)))
+        perform(doGet().basicAuth(ADMIN))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(ADMIN, USER));
+                .andExpect(USER_MATCHERS.contentJson(ADMIN, USER));
     }
 
     @Test
     void enable() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.patch(REST_URL + USER_ID)
-                .with(userHttpBasic(ADMIN))
+        perform(doPatch(USER_ID).basicAuth(ADMIN).unwrap()
                 .param("enabled", "false")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

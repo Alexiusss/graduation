@@ -22,8 +22,8 @@ public class RestaurantServiceTest extends AbstractServiceTest {
         Restaurant created = service.create(newRestaurant);
         Integer newId = created.getId();
         newRestaurant.setId(newId);
-        assertMatch(created, newRestaurant);
-        assertMatch(service.get(newId), newRestaurant);
+        RESTAURANT_MATCHERS.assertMatch(created, newRestaurant);
+        RESTAURANT_MATCHERS.assertMatch(service.get(newId), newRestaurant);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void get() {
         Restaurant restaurant = service.get(RESTAURANT_ID);
-        assertMatch(restaurant, RESTAURANT_1);
+        RESTAURANT_MATCHERS.assertMatch(restaurant, RESTAURANT_1);
     }
 
     @Test
@@ -54,20 +54,20 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void getByName() {
         Restaurant restaurant = service.getByName("TOKIO-CITY");
-        assertMatch(restaurant, RESTAURANT_1);
+        RESTAURANT_MATCHERS.assertMatch(restaurant, RESTAURANT_1);
     }
 
     @Test
     void getAll() {
         List<Restaurant> all = service.getAll();
-        assertMatch(all, ALL_RESTS);
+        RESTAURANT_MATCHERS.assertMatch(all, ALL_RESTS);
     }
 
     @Test
     void update() {
         Restaurant updated = getUpdated();
         service.update(updated);
-        assertMatch(service.get(RESTAURANT_ID), updated);
+        RESTAURANT_MATCHERS.assertMatch(service.get(RESTAURANT_ID), updated);
     }
 
     @Test

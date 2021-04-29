@@ -1,17 +1,14 @@
 package ru.voting_system.TestData;
 
-import org.springframework.test.web.servlet.ResultMatcher;
+import ru.voting_system.TestMatchers;
 import ru.voting_system.model.Dish;
 
 import java.time.Month;
 import java.util.List;
 
 import static java.time.LocalDate.of;
-import static org.assertj.core.api.Assertions.assertThat;
-import static ru.voting_system.TestUtil.readFromJsonMvcResult;
-import static ru.voting_system.TestUtil.readListFromJsonMvcResult;
+import static ru.voting_system.TestData.RestaurantTestData.RESTAURANT_2;
 import static ru.voting_system.model.AbstractBaseEntity.START_SEQ;
-import static ru.voting_system.TestData.RestaurantTestData.*;
 
 public class DishTestData {
     public static final int DISH1_ID = START_SEQ + 11;
@@ -32,23 +29,5 @@ public class DishTestData {
         return new Dish(DISH1_ID, "UpdatedDish", DISH_1.getDate(), 300, RESTAURANT_2);
     }
 
-    public static void assertMatch(Dish actual, Dish excepted){
-        assertThat(actual).isEqualToIgnoringGivenFields(excepted,"restaurant");
-    }
-
-    public static void assertMatch(Iterable<Dish> actual, Dish... expected){
-        assertMatch(actual, List.of(expected));
-    }
-
-    public static void assertMatch(Iterable<Dish> actual, Iterable<Dish> expected){
-        assertThat(actual).usingElementComparatorIgnoringFields("restaurant").isEqualTo(expected);
-    }
-
-    public static ResultMatcher contentJson(Dish... expected){
-        return result -> assertMatch(readListFromJsonMvcResult(result, Dish.class), List.of(expected));
-    }
-
-    public static ResultMatcher contentJson(Dish expected) {
-        return result -> assertMatch(readFromJsonMvcResult(result, Dish.class), expected);
-    }
+   public static TestMatchers<Dish> DISH_MATCHERS = TestMatchers.useFieldComparator(Dish.class, "restaurant");
 }

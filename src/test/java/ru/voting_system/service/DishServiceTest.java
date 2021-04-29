@@ -6,16 +6,14 @@ import ru.voting_system.TestData.RestaurantTestData;
 import ru.voting_system.model.Dish;
 import ru.voting_system.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.Month;
 
-import javax.validation.ConstraintViolationException;
-
-import static ru.voting_system.TestData.DishTestData.*;
 import static java.time.LocalDate.of;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.voting_system.TestData.DishTestData.*;
 
 public class DishServiceTest extends AbstractServiceTest {
 
@@ -28,8 +26,8 @@ public class DishServiceTest extends AbstractServiceTest {
         Dish created = service.create(newDish, RESTAURANT_IDD);
         Integer newId = created.getId();
         newDish.setId(newId);
-        assertMatch(newDish, created);
-        assertMatch(service.get(newId, RESTAURANT_IDD), newDish);
+        DISH_MATCHERS.assertMatch(newDish, created);
+        DISH_MATCHERS.assertMatch(service.get(newId, RESTAURANT_IDD), newDish);
     }
 
     @Test
@@ -54,7 +52,7 @@ public class DishServiceTest extends AbstractServiceTest {
     @Test
     void get() {
         Dish actual = service.get(DISH1_ID, RESTAURANT_IDD);
-        assertMatch(actual, DISH_1);
+        DISH_MATCHERS.assertMatch(actual, DISH_1);
     }
 
     @Test
@@ -71,14 +69,14 @@ public class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void getAll() {
-        assertMatch(service.getAll(RESTAURANT_IDD), DISHES);
+        DISH_MATCHERS.assertMatch(service.getAll(RESTAURANT_IDD), DISHES);
     }
 
     @Test
     void update() {
         Dish updated = getUpdated();
         service.update(updated, RESTAURANT_IDD);
-        assertMatch(service.get(DISH1_ID, RESTAURANT_IDD), updated);
+        DISH_MATCHERS.assertMatch(service.get(DISH1_ID, RESTAURANT_IDD), updated);
     }
 
     @Test
@@ -89,7 +87,7 @@ public class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void getByDate() {
-        assertMatch(service.getByDate(LocalDate.of(2020, Month.SEPTEMBER, 12), RESTAURANT_IDD), DISH_3, DISH_2, DISH_1);
+        DISH_MATCHERS.assertMatch(service.getByDate(LocalDate.of(2020, Month.SEPTEMBER, 12), RESTAURANT_IDD), DISH_3, DISH_2, DISH_1);
     }
 
     @Test

@@ -27,25 +27,25 @@ public class VoteServiceTest extends AbstractServiceTest {
         Vote created = service.vote(RESTAURANT_IDD, USER_ID);
         Integer newID = created.getId();
         newVote.setId(newID);
-        assertMatch(newVote, created);
-        assertMatch(service.voteRepository.findById(newID).orElse(null), newVote);
+        VOTE_MATCHERS.assertMatch(newVote, created);
+        VOTE_MATCHERS.assertMatch(service.voteRepository.findById(newID).orElse(null), newVote);
     }
 
     @Test
     void revote() throws Exception {
         Vote updated = getUpdated();
         Vote created = service.vote(updated.getRestaurant().getId(), updated.getUser().getId());
-        assertMatch(updated, created);
+        VOTE_MATCHERS.assertMatch(updated, created);
     }
 
     @Test
     void getAllByUserIdWithRestaurants() {
-        assertMatch(service.getAllByUserIdWithRestaurants(USER_ID), VOTES);
+        VOTE_MATCHERS.assertMatch(service.getAllByUserIdWithRestaurants(USER_ID), VOTES);
     }
 
     @Test
     void getByUserIdAndDate() {
-        assertMatch(service.getByUserIdAndDate(USER_ID, LocalDate.of(2020, Month.SEPTEMBER, 12)), VOTE_1);
+        VOTE_MATCHERS.assertMatch(service.getByUserIdAndDate(USER_ID, LocalDate.of(2020, Month.SEPTEMBER, 12)), VOTE_1);
     }
 
 }
