@@ -26,5 +26,9 @@
 
     <context:component-scan base-package="ru.voting_system.**.web"/>
 
+    <mvc:interceptors>
+        <bean class="ru.voting_system.web.interceptor.ModelInterceptor"/>
+    </mvc:interceptors>
+
 
 </beans>
