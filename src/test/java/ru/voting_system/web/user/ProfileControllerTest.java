@@ -3,6 +3,7 @@ package ru.voting_system.web.user;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import ru.voting_system.model.User;
 import ru.voting_system.service.UserService;
 import ru.voting_system.to.UserTo;
@@ -14,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.voting_system.TestData.UserTestData.*;
 import static ru.voting_system.web.user.ProfileController.REST_URL;
+import static ru.voting_system.TestUtil.readFromJson;
 
 class ProfileControllerTest extends AbstractControllerTest {
 
@@ -55,5 +57,20 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         USER_MATCHERS.assertMatch(userService.get(USER_ID), UserUtil.updateFromTo(new User(USER), updatedTo));
+    }
+
+    @Test
+    void register() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", "newmail@ya.ru", "newPassword");
+        User newUser = UserUtil.createNewFromTo(newTo);
+        ResultActions action = perform(doPost("/register").jsonBody(newTo))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        User created = readFromJson(action, User.class);
+        Integer newId = created.getId();
+        newUser.setId(newId);
+        USER_MATCHERS.assertMatch(created, newUser);
+        USER_MATCHERS.assertMatch(userService.get(newId), newUser);
     }
 }

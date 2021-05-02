@@ -129,6 +129,10 @@ public class AbstractControllerTest {
         return wrap(MockMvcRequestBuilders.post(url + urlTemplatePad, uriVars));
     }
 
+    protected RequestWrapper doPost(String pad) throws Exception {
+                return wrap(MockMvcRequestBuilders.post(url + pad));
+            }
+
     protected RequestWrapper doPatch(int id) {
         return wrap(MockMvcRequestBuilders.patch(url + "{id}", id));
     }
