@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -19,6 +20,7 @@ import ru.voting_system.util.UserUtil;
 
 import java.util.List;
 
+import static ru.voting_system.util.UserUtil.prepareToSave;
 import static ru.voting_system.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
@@ -26,15 +28,17 @@ import static ru.voting_system.util.ValidationUtil.checkNotFoundWithId;
 public class UserService implements UserDetailsService {
     public static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @CacheEvict(value = "users", allEntries = true)
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
-        return repository.save(user);
+        return prepareAndSave(user);
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -63,8 +67,7 @@ public class UserService implements UserDetailsService {
     @CacheEvict(value = "users", allEntries = true)
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        // checkNotFoundWithId(repository.save(user), user.getId()); check works only for JDBC, disabled
-        repository.save(user);
+        prepareAndSave(user);
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -72,6 +75,10 @@ public class UserService implements UserDetailsService {
     public void update (UserTo userTo) {
         User user = get(userTo.id());
         repository.save(UserUtil.updateFromTo(user, userTo));
+    }
+
+    private User prepareAndSave(User user) {
+        return repository.save(prepareToSave(user, passwordEncoder));
     }
 
     @CacheEvict(value = "users", allEntries = true)
