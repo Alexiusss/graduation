@@ -13,6 +13,9 @@
                 <property name="objectMapper" ref="objectMapper"/>
             </bean>
         </mvc:message-converters>
+        <mvc:argument-resolvers>
+            <bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver "/>
+        </mvc:argument-resolvers>
     </mvc:annotation-driven>
 
     <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" id="conversionService">
@@ -25,10 +28,5 @@
     </bean>
 
     <context:component-scan base-package="ru.voting_system.**.web"/>
-
-    <mvc:interceptors>
-        <bean class="ru.voting_system.web.interceptor.ModelInterceptor"/>
-    </mvc:interceptors>
-
 
 </beans>
