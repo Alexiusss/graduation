@@ -10,13 +10,13 @@ import ru.voting_system.model.Dish;
 import ru.voting_system.model.Restaurant;
 import ru.voting_system.service.DishService;
 import ru.voting_system.service.RestaurantService;
+import ru.voting_system.util.exception.ErrorType;
 import ru.voting_system.util.exception.NotFoundException;
 import ru.voting_system.web.AbstractControllerTest;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.voting_system.TestData.DishTestData.*;
 import static ru.voting_system.TestData.RestaurantTestData.*;
 import static ru.voting_system.TestData.UserTestData.ADMIN;
@@ -65,6 +65,26 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         newRestaurant.setId(newId);
         RESTAURANT_MATCHERS.assertMatch(created, newRestaurant);
         RESTAURANT_MATCHERS.assertMatch(restaurantService.get(newId), newRestaurant);
+    }
+
+    @Test
+    void createInvalid() throws Exception {
+        Restaurant invalid = new Restaurant(null, null);
+        perform(doPost().jsonBody(invalid).basicAuth(ADMIN))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andDo(print());
+    }
+
+    @Test
+    void updateInvalid() throws Exception {
+        Restaurant invalid = new Restaurant(RESTAURANT_ID, null);
+        perform(doPut(RESTAURANT_ID).jsonBody(invalid).basicAuth(ADMIN))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andDo(print());
     }
 
     @Test

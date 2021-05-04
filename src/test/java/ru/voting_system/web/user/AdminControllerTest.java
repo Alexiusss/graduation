@@ -4,16 +4,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import ru.voting_system.model.Role;
 import ru.voting_system.model.User;
 import ru.voting_system.service.UserService;
+import ru.voting_system.util.exception.ErrorType;
 import ru.voting_system.util.exception.NotFoundException;
 import ru.voting_system.web.AbstractControllerTest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.voting_system.TestData.UserTestData.*;
 import static ru.voting_system.TestUtil.readFromJson;
 
@@ -81,7 +82,7 @@ class AdminControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         User updated = getUpdated();
-        perform(doPut(USER_ID).jsonBody(updated).basicAuth(ADMIN))
+        perform(doPut(USER_ID).jsonUserWithPassword(updated).basicAuth(ADMIN))
                 .andExpect(status().isNoContent());
 
         USER_MATCHERS.assertMatch(userService.get(USER_ID), updated);
@@ -98,6 +99,26 @@ class AdminControllerTest extends AbstractControllerTest {
         newUser.setId(newId);
         USER_MATCHERS.assertMatch(created, newUser);
         USER_MATCHERS.assertMatch(userService.get(newId), newUser);
+    }
+
+    @Test
+    void createInvalid() throws Exception {
+        User expected = new User(null, null, " ", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
+        perform(doPost().jsonBody(expected).basicAuth(ADMIN))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andDo(print());
+    }
+
+    @Test
+    public void updateInvalid() throws Exception {
+        User updated = new User(USER);
+        updated.setName("");
+        perform(doPut(USER_ID).jsonBody(updated).basicAuth(ADMIN))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andDo(print());
     }
 
 
