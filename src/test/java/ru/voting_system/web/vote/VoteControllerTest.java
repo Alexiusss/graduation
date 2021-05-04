@@ -13,13 +13,15 @@ import ru.voting_system.web.AbstractControllerTest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.voting_system.TestData.UserTestData.ADMIN;
 import static ru.voting_system.TestData.VoteTestData.*;
 import static ru.voting_system.TestUtil.readFromJson;
 import static ru.voting_system.service.VoteService.TIME_LIMIT;
+import static ru.voting_system.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.voting_system.web.ExceptionInfoHandler.USER_VOTE_TIME_DUPLICATE;
 
 
 class VoteControllerTest extends AbstractControllerTest {
@@ -64,20 +66,31 @@ class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createWithDuplicationDate() throws Exception {
+        Vote invalid = VoteTestData.getNew();
+        invalid.setUser(ADMIN);
+
+        ResultActions action = perform(doPost().basicAuth(ADMIN).unwrap()
+                .param("restaurantId", String.valueOf(invalid.getRestaurant().getId())))
+                .andDo(print());
+
+    }
+
+    @Test
     void update() throws Exception {
         Vote updated = VoteTestData.getUpdated();
-        ResultActions action = perform(doPost().basicAuth(UserTestData.USER).unwrap()
+        ResultActions action = perform(doPost().basicAuth(ADMIN).unwrap()
                 .param("restaurantId", String.valueOf(updated.getRestaurant().getId())))
                 .andDo(print());
 
         if (LocalTime.now().isBefore(TIME_LIMIT)) {
             action.andExpect(status().isCreated());
-            VOTE_MATCHERS.assertMatch(voteService.getByUserIdAndDate(UserTestData.USER_ID, LocalDate.now()), updated);
+            VOTE_MATCHERS.assertMatch(voteService.getByUserIdAndDate(UserTestData.ADMIN_ID, LocalDate.now()), updated);
         } else {
-            //https://www.baeldung.com/spring-mvc-test-exceptions
-            action
-                    .andExpect(status().isUnprocessableEntity())
-                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof ru.voting_system.util.exception.VoteTimeLimitException));
+            action.andExpect(status().isUnprocessableEntity())
+                    .andExpect(errorType(VALIDATION_ERROR))
+                    .andExpect(detailMessage(USER_VOTE_TIME_DUPLICATE))
+                    .andDo(print());
         }
     }
 }

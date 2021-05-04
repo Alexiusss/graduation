@@ -4,23 +4,27 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.voting_system.model.Role;
 import ru.voting_system.model.User;
 import ru.voting_system.service.UserService;
-import ru.voting_system.util.exception.ErrorType;
 import ru.voting_system.util.exception.NotFoundException;
 import ru.voting_system.web.AbstractControllerTest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.voting_system.TestData.UserTestData.*;
 import static ru.voting_system.TestUtil.readFromJson;
+import static ru.voting_system.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.voting_system.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_EMAIL;
 
 class AdminControllerTest extends AbstractControllerTest {
 
-       @Autowired
+    @Autowired
     UserService userService;
 
     public AdminControllerTest() {
@@ -46,7 +50,7 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void getByEmail() throws Exception {
-       perform(doGet("by?email={email}", ADMIN.getEmail()).basicAuth(ADMIN))
+        perform(doGet("by?email={email}", ADMIN.getEmail()).basicAuth(ADMIN))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHERS.contentJson(ADMIN));
@@ -91,7 +95,7 @@ class AdminControllerTest extends AbstractControllerTest {
     @Test
     void createWithLocation() throws Exception {
         User newUser = getNew();
-        ResultActions action = perform(doPost().jsonBody(newUser).basicAuth(ADMIN))
+        ResultActions action = perform(doPost().jsonUserWithPassword(newUser).basicAuth(ADMIN))
                 .andExpect(status().isCreated());
 
         User created = readFromJson(action, User.class);
@@ -106,7 +110,7 @@ class AdminControllerTest extends AbstractControllerTest {
         User expected = new User(null, null, " ", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         perform(doPost().jsonBody(expected).basicAuth(ADMIN))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andExpect(errorType(VALIDATION_ERROR))
                 .andDo(print());
     }
 
@@ -117,7 +121,30 @@ class AdminControllerTest extends AbstractControllerTest {
         perform(doPut(USER_ID).jsonBody(updated).basicAuth(ADMIN))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print())
-                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andDo(print());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateDuplicate() throws Exception {
+        User updated = new User(USER);
+        updated.setEmail("admin@gmail.com");
+        perform(doPut(USER_ID).jsonUserWithPassword(updated).basicAuth(ADMIN))
+                .andExpect(status().isConflict())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_EMAIL))
+                .andDo(print());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createDuplicate() throws Exception {
+        User expected = new User(null, "New", "user@yandex.ru", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
+        perform(doPost().jsonUserWithPassword(expected).basicAuth(ADMIN))
+                .andExpect(status().isConflict())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_EMAIL))
                 .andDo(print());
     }
 

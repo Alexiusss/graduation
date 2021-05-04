@@ -39,7 +39,7 @@ public class VoteService {
 
         if (vote != null) {
             if (LocalTime.now().isAfter(TIME_LIMIT)) {
-                throw new VoteTimeLimitException(String.format("It`s too late, you can revote before %s", TIME_LIMIT));
+                throw new VoteTimeLimitException(String.format("It`s too late, you can re-vote before %s", TIME_LIMIT));
             }
             vote.setRestaurant(restaurant);
             return vote;

@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.voting_system.model.User;
 import ru.voting_system.to.UserTo;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 import static ru.voting_system.web.SecurityUtil.authUserId;
@@ -31,13 +32,13 @@ public class ProfileController extends AbstractUserController{
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo){
+    public void update(@Valid @RequestBody UserTo userTo){
         super.update(userTo, authUserId());
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<User> register (@RequestBody UserTo userTo) {
+    public ResponseEntity<User> register (@Valid @RequestBody UserTo userTo) {
         User created = super.create(userTo);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "{id}")
