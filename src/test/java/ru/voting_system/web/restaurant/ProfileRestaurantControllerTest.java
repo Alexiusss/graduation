@@ -22,8 +22,6 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-
-        //TODO add expected list of TO's
     }
 
     @Test
@@ -32,7 +30,5 @@ class ProfileRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-        //TODO add expected list TO
-                //.andExpect(contentJsonTo(createTo(RESTAURANT_2, DISHES)));
     }
 }

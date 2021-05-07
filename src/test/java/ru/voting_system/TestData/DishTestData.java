@@ -22,7 +22,7 @@ public class DishTestData {
 
 
     public static Dish getNew(){
-        return new Dish(null, "NewDeal", of(2020, Month.SEPTEMBER, 11), 100, RESTAURANT_2);
+        return new Dish(null, "NewDish", of(2020, Month.SEPTEMBER, 11), 100, RESTAURANT_2);
     }
 
     public static Dish getUpdated(){
