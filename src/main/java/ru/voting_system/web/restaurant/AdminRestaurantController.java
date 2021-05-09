@@ -74,7 +74,7 @@ public class AdminRestaurantController {
     }
 
     @PostMapping(value = DISHES_URL, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createDish(@PathVariable int restaurantId, @RequestBody Dish dish) {
+    public ResponseEntity<Dish> createDish(@PathVariable int restaurantId, @Valid @RequestBody Dish dish) {
         log.info("Add dish {} into restaurant {}", dish, restaurantId);
         checkNew(dish);
         Dish created = dishService.create(dish, restaurantId);
@@ -86,7 +86,7 @@ public class AdminRestaurantController {
 
     @PutMapping(value = DISHES_URL + "/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateDish(@RequestBody Dish dish, @PathVariable int dishId, @PathVariable int restaurantId) {
+    public void updateDish(@Valid @RequestBody Dish dish, @PathVariable int dishId, @PathVariable int restaurantId) {
         log.info("update dish {} for restaurant {}", dish, restaurantId);
         assureIdConsistent(dish, dishId);
         dishService.update(dish, restaurantId);

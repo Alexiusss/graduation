@@ -1,4 +1,4 @@
-##Task
+## Task
 
 Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
 
@@ -93,5 +93,7 @@ As a result, provide a link to github repository. It should contain the code, RE
 
 #### validate with Error
 `curl -s -X POST -d '{}' -H 'Content-Type: application/json;charset=UTF-8' http://localhost:8080/graduation/admin/users --user admin@gmail.com:admin`
+
 `curl -s -i -X PUT -d '{"name":" "}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100003 --user admin@gmail.com:admin`
+
 `curl -s -i -X PUT -d '{"id":100011,"name":" ","date":"2020-09-12","price":0}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/admin/restaurants/100003/dishes/100011 --user admin@gmail.com:admin`

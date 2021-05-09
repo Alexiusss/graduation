@@ -146,4 +146,25 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         assertThrows(NotFoundException.class, () -> dishService.get(DISH_1.getId(), RESTAURANT_2.getId()));
     }
 
+    @Test
+    void createInvalidDish() throws Exception {
+        Dish invalid = new Dish(null, null, null, 0, RESTAURANT_1);
+        perform((doPost(DISHES_URL, RESTAURANT_1.getId()).jsonBody(invalid).basicAuth(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andDo(print());
+    }
+
+    @Test
+    void updateInvalidDish() throws Exception {
+        Dish updated = DishTestData.getUpdated();
+        Dish invalid = new Dish(updated.getId(), null, null, 0, RESTAURANT_2);
+        perform(doPut(DISHES_URL + DISH_1.getId(), RESTAURANT_2.getId()).jsonBody(invalid).basicAuth(ADMIN))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type").value(ErrorType.VALIDATION_ERROR.name()))
+                .andDo(print());
+    }
+
 }
