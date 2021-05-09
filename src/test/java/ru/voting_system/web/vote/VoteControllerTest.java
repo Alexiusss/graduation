@@ -66,17 +66,6 @@ class VoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createWithDuplicationDate() throws Exception {
-        Vote invalid = VoteTestData.getNew();
-        invalid.setUser(ADMIN);
-
-        ResultActions action = perform(doPost().basicAuth(ADMIN).unwrap()
-                .param("restaurantId", String.valueOf(invalid.getRestaurant().getId())))
-                .andDo(print());
-
-    }
-
-    @Test
     void update() throws Exception {
         Vote updated = VoteTestData.getUpdated();
         ResultActions action = perform(doPost().basicAuth(ADMIN).unwrap()

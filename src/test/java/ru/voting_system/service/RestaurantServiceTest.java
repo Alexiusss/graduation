@@ -52,12 +52,6 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void getByName() {
-        Restaurant restaurant = service.getByName("TOKIO-CITY");
-        RESTAURANT_MATCHERS.assertMatch(restaurant, RESTAURANT_1);
-    }
-
-    @Test
     void getAll() {
         List<Restaurant> all = service.getAll();
         RESTAURANT_MATCHERS.assertMatch(all, ALL_RESTS);

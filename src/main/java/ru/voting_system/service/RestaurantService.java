@@ -32,11 +32,6 @@ public class RestaurantService {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-    public Restaurant getByName(String name) {
-        Assert.notNull(name, "restaurant must not be null");
-        return repository.getByName(name);
-    }
-
     public List<Restaurant> getAll() {
         return repository.findAll(SORT_NAME);
     }
