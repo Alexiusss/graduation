@@ -33,7 +33,7 @@ public class VoteService {
     @Transactional
     public Vote vote(int restaurantId, int userId) {
         LocalDate today = LocalDate.now();
-        final Restaurant restaurant = restaurantRepository.getOne(restaurantId);
+        final Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
         Vote vote;
         vote = voteRepository.findByDateAndUserId(today, userId);
 
