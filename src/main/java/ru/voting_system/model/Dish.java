@@ -1,6 +1,5 @@
 package ru.voting_system.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
@@ -27,7 +26,6 @@ public class Dish extends AbstractNamedEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = CASCADE)
     @NotNull
-    @JsonBackReference
     private Restaurant restaurant;
 
     public Dish() {

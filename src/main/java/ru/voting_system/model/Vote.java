@@ -29,7 +29,6 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = CASCADE)
     @NotNull
-    @JsonBackReference
     private Restaurant restaurant;
 
     public Vote() {
