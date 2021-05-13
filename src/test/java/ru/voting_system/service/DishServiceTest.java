@@ -7,9 +7,9 @@ import ru.voting_system.model.Dish;
 import ru.voting_system.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.time.LocalDate;
 import java.time.Month;
 
+import static java.time.LocalDate.now;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -87,7 +87,7 @@ public class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void getByDate() {
-        DISH_MATCHERS.assertMatch(service.getByDate(LocalDate.of(2020, Month.SEPTEMBER, 12), RESTAURANT_IDD), DISH_3, DISH_2, DISH_1);
+        DISH_MATCHERS.assertMatch(service.getByDate(now(), RESTAURANT_IDD), DISH_3, DISH_2, DISH_1);
     }
 
     @Test
