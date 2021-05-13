@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 import ru.voting_system.model.Restaurant;
 import ru.voting_system.repository.RestaurantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.voting_system.util.ValidationUtil.checkNotFoundWithId;
@@ -42,11 +43,11 @@ public class RestaurantService {
     }
 
     public List<Restaurant> getAllWithVotes() {
-        return repository.getAllWithVotes();
+        return repository.getAllWithMenuAndVotes(LocalDate.now());
     }
 
     public Restaurant getByIdWithVotes(int id) {
-        return repository.getByIdWithVotes(id);
+        return repository.getByIdWithMenuAndVotes(id);
     }
 
 

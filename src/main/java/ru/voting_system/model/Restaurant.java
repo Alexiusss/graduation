@@ -1,7 +1,6 @@
 package ru.voting_system.model;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,7 +11,7 @@ public class Restaurant extends AbstractNamedEntity {
     private Set<Dish> dishes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    private List<Vote> votes;
+    private Set<Vote> votes;
 
     public Restaurant() {
     }
@@ -37,11 +36,11 @@ public class Restaurant extends AbstractNamedEntity {
         this.dishes = dishes;
     }
 
-    public List<Vote> getVotes() {
+    public Set<Vote> getVotes() {
         return votes;
     }
 
-    public void setVotes(List<Vote> votes) {
+    public void setVotes(Set<Vote> votes) {
         this.votes = votes;
     }
 
