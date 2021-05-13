@@ -12,10 +12,8 @@ import ru.voting_system.util.JpaUtil;
 import ru.voting_system.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.voting_system.TestData.UserTestData.*;
@@ -115,6 +113,5 @@ public class UserServiceTest extends AbstractServiceTest {
         validateRootCause(() -> service.create(new User(USER_ID, "  ", "user@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(USER_ID, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "  ", Role.ROLE_ADMIN)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(ADMIN_ID, "Admin", "admin@yandex.ru", "pass", false, new Date(), Set.of())), ConstraintViolationException.class);
     }
 }
