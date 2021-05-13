@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.voting_system.TestData.DishTestData.*;
 import static ru.voting_system.TestData.RestaurantTestData.*;
+import static ru.voting_system.TestData.RestaurantTestData.getUpdated;
 import static ru.voting_system.TestData.UserTestData.ADMIN;
 import static ru.voting_system.TestUtil.readFromJson;
 
@@ -65,6 +66,15 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         newRestaurant.setId(newId);
         RESTAURANT_MATCHERS.assertMatch(created, newRestaurant);
         RESTAURANT_MATCHERS.assertMatch(restaurantService.get(newId), newRestaurant);
+    }
+
+    @Test
+    void update() throws Exception {
+        Restaurant updated = getUpdated();
+        perform(doPut(updated.getId()).jsonBody(updated).basicAuth(ADMIN))
+                .andExpect(status().isNoContent());
+
+        RESTAURANT_MATCHERS.assertMatch(restaurantService.get(updated.getId()), updated);
     }
 
     @Test
