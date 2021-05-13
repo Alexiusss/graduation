@@ -1,9 +1,7 @@
 package ru.voting_system.util;
 
-import org.ehcache.core.spi.service.ServiceFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

@@ -13,8 +13,6 @@ import ru.voting_system.to.UserTo;
 import javax.validation.Valid;
 import java.net.URI;
 
-import static ru.voting_system.web.SecurityUtil.authUserId;
-
 @RestController
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController extends AbstractUserController{
