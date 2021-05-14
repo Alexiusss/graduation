@@ -1,5 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a9a93d2b3bcd4cf9acc2d47a686050f8)](https://www.codacy.com/gh/Alexiusss/graduation/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Alexiusss/graduation&amp;utm_campaign=Badge_Grade)
-
+[![Build Status](https://travis-ci.org/Alexiusss/graduation.svg?branch=master)](https://travis-ci.org/Alexiusss/graduation)
 ## Task
 
 Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
