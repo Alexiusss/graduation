@@ -22,7 +22,7 @@ public class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Dish newDish = getNew();
+        Dish newDish = getNewDish();
         Dish created = service.create(newDish, RESTAURANT_IDD);
         Integer newId = created.getId();
         newDish.setId(newId);
@@ -74,7 +74,7 @@ public class DishServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        Dish updated = getUpdated();
+        Dish updated = getUpdatedDish();
         service.update(updated, RESTAURANT_IDD);
         DISH_MATCHERS.assertMatch(service.get(DISH1_ID, RESTAURANT_IDD), updated);
     }

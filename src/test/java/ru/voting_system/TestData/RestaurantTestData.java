@@ -21,11 +21,11 @@ public class RestaurantTestData {
     public static final List<Restaurant> ALL_RESTS = List.of(RESTAURANT_4, RESTAURANT_2, RESTAURANT_3, RESTAURANT_1);
 
 
-    public static Restaurant getNew(){
+    public static Restaurant getNewRestaurant(){
         return new Restaurant("NewRestaurant");
     }
 
-    public static Restaurant getUpdated(){
+    public static Restaurant getUpdatedRestaurant(){
         Restaurant updated = new Restaurant(RESTAURANT_1);
         updated.setName("UpdateName");
         return updated;

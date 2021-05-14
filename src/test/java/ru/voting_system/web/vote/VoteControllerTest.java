@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.voting_system.TestData.UserTestData;
-import ru.voting_system.TestData.VoteTestData;
 import ru.voting_system.model.Vote;
 import ru.voting_system.service.VoteService;
 import ru.voting_system.web.AbstractControllerTest;
@@ -52,7 +51,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Vote newVote = VoteTestData.getNew();
+        Vote newVote = getNew();
         ResultActions action = perform(doPost().basicAuth(UserTestData.USER).unwrap()
                 .param("restaurantId", String.valueOf(newVote.getRestaurant().getId())))
                 .andExpect(status().isCreated())
@@ -67,7 +66,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Vote updated = VoteTestData.getUpdated();
+        Vote updated = getUpdated();
         ResultActions action = perform(doPost().basicAuth(ADMIN).unwrap()
                 .param("restaurantId", String.valueOf(updated.getRestaurant().getId())))
                 .andDo(print());

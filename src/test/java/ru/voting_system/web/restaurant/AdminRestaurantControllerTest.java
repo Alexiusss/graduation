@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import ru.voting_system.TestData.DishTestData;
-import ru.voting_system.TestData.RestaurantTestData;
 import ru.voting_system.model.Dish;
 import ru.voting_system.model.Restaurant;
 import ru.voting_system.service.DishService;
@@ -19,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.voting_system.TestData.DishTestData.*;
 import static ru.voting_system.TestData.RestaurantTestData.*;
-import static ru.voting_system.TestData.RestaurantTestData.getUpdated;
 import static ru.voting_system.TestData.UserTestData.ADMIN;
 import static ru.voting_system.TestUtil.readFromJson;
 
@@ -57,7 +54,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void create() throws Exception {
-        Restaurant newRestaurant = RestaurantTestData.getNew();
+        Restaurant newRestaurant = getNewRestaurant();
         ResultActions action = perform(doPost().jsonBody(newRestaurant).basicAuth(ADMIN))
                 .andExpect(status().isCreated());
 
@@ -70,7 +67,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Restaurant updated = getUpdated();
+        Restaurant updated = getUpdatedRestaurant();
         perform(doPut(updated.getId()).jsonBody(updated).basicAuth(ADMIN))
                 .andExpect(status().isNoContent());
 
@@ -127,7 +124,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void createDish() throws Exception {
-        Dish newDish = DishTestData.getNew();
+        Dish newDish = getNewDish();
         ResultActions action = perform(doPost(DISHES_URL, RESTAURANT_2.getId()).jsonBody(newDish).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isCreated());
@@ -141,7 +138,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void updateDish() throws Exception {
-        Dish updated = DishTestData.getUpdated();
+        Dish updated = getUpdatedDish();
         perform(doPut(DISHES_URL + DISH_1.getId(), RESTAURANT_2.getId()).jsonBody(updated).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isNoContent());
@@ -168,7 +165,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalidDish() throws Exception {
-        Dish updated = DishTestData.getUpdated();
+        Dish updated = getUpdatedDish();
         Dish invalid = new Dish(updated.getId(), null, null, 0, RESTAURANT_2);
         perform(doPut(DISHES_URL + DISH_1.getId(), RESTAURANT_2.getId()).jsonBody(invalid).basicAuth(ADMIN))
                 .andDo(print())

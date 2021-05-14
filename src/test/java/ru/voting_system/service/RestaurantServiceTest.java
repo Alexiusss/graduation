@@ -18,7 +18,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Restaurant newRestaurant = getNew();
+        Restaurant newRestaurant = getNewRestaurant();
         Restaurant created = service.create(newRestaurant);
         Integer newId = created.getId();
         newRestaurant.setId(newId);
@@ -59,7 +59,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        Restaurant updated = getUpdated();
+        Restaurant updated = getUpdatedRestaurant();
         service.update(updated);
         RESTAURANT_MATCHERS.assertMatch(service.get(RESTAURANT_ID), updated);
     }

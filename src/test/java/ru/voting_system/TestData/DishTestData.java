@@ -20,11 +20,11 @@ public class DishTestData {
     public static final List<Dish> DISHES = List.of(DISH_1, DISH_2, DISH_3);
 
 
-    public static Dish getNew(){
+    public static Dish getNewDish(){
         return new Dish(null, "NewDish", now(), 100, RESTAURANT_2);
     }
 
-    public static Dish getUpdated(){
+    public static Dish getUpdatedDish(){
         return new Dish(DISH1_ID, "UpdatedDish", DISH_1.getDate(), 300, RESTAURANT_2);
     }
 

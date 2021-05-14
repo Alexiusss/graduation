@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.voting_system.model.Vote;
 import ru.voting_system.service.VoteService;
-import ru.voting_system.web.SecurityUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -44,7 +43,7 @@ public class VoteController {
     @PostMapping
     public ResponseEntity<Vote> vote(@RequestParam int restaurantId) {
         log.info("vote for restaurant: {}", restaurantId);
-        int userId = SecurityUtil.authUserId();
+        int userId = authUserId();
         Vote created = voteService.vote(restaurantId, userId);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
