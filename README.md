@@ -21,8 +21,11 @@ As a result, provide a link to github repository. It should contain the code, RE
 
 -----------------------------
 ##Swagger Api Documentation
+
 http://localhost:8080/graduation/v2/api-docs  
+
 http://localhost:8080/graduation/swagger-ui.html
+
 -----------------------------
 ##CURL commands
 
