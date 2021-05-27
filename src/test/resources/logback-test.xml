@@ -17,9 +17,6 @@
         <appender-ref ref="result"/>
     </logger>
 
-<!--    <logger name="org.postgresql" level="debug"/>-->
-<!--    <logger name="org.springframework.jdbc" level="debug"/>-->
-
     <logger name="ru.voting_system" level="debug"/>
 <!--    <logger name="org.springframework.web.servlet" level="debug"/>-->
 

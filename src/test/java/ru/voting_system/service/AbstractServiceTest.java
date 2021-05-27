@@ -13,7 +13,6 @@ import static ru.voting_system.util.ValidationUtil.getRootCause;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-//@ExtendWith(SpringExtension.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ExtendWith(TimingExtension.class)
 public abstract class AbstractServiceTest {

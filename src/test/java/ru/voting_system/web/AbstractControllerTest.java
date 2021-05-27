@@ -31,8 +31,6 @@ import static ru.voting_system.web.AbstractControllerTest.RequestWrapper.wrap;
         "classpath:spring/spring-mvc.xml",
         "classpath:spring/spring-db.xml"
 })
-//@WebAppConfiguration
-//@ExtendWith(SpringExtension.class)
 @Transactional
 public class AbstractControllerTest {
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
@@ -43,9 +41,6 @@ public class AbstractControllerTest {
     }
 
     private MockMvc mockMvc;
-
-//    @Autowired
-//    private CacheManager cacheManager;
 
     @Autowired(required = false)
     private JpaUtil jpaUtil;
