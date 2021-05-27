@@ -2,15 +2,18 @@ package ru.voting_system.model;
 
 import javax.persistence.*;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurant_unique_name_idx")})
 public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonManagedReference("dishes")
     private Set<Dish> dishes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @JsonManagedReference("restaurant_votes")
     private Set<Vote> votes;
 
     public Restaurant() {

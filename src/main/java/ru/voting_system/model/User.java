@@ -1,6 +1,7 @@
 package ru.voting_system.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -50,7 +51,9 @@ public class User extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
-    //@JsonIgnore
+    @JsonManagedReference("votes")
+    //https://stackoverflow.com/a/44988100/548473
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Vote> votes;
 
     public User() {
