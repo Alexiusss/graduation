@@ -1,5 +1,6 @@
 package ru.voting_system.util;
 
+import lombok.experimental.UtilityClass;
 import ru.voting_system.model.Restaurant;
 import ru.voting_system.to.RestaurantTo;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+@UtilityClass
 public class RestaurantUtil {
 
     public static RestaurantTo createTos(Restaurant restaurant) {

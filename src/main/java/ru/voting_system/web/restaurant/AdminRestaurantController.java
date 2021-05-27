@@ -1,8 +1,7 @@
 package ru.voting_system.web.restaurant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +21,16 @@ import static ru.voting_system.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
+@AllArgsConstructor
 public class AdminRestaurantController {
 
     static final String REST_URL = "/admin/restaurants";
 
     public static final String DISHES_URL = "/{restaurantId}/dishes";
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
-
-    @Autowired
-    RestaurantService restaurantService;
-
-    @Autowired
-    DishService dishService;
+    private final RestaurantService restaurantService;
+    private final DishService dishService;
 
     @GetMapping
     public List<Restaurant> getAll() {

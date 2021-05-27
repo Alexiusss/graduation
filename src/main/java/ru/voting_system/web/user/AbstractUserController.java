@@ -1,7 +1,6 @@
 package ru.voting_system.web.user;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.voting_system.model.User;
 import ru.voting_system.service.UserService;
@@ -12,8 +11,8 @@ import java.util.List;
 
 import static ru.voting_system.util.ValidationUtil.assureIdConsistent;
 
+@Slf4j
 public abstract class AbstractUserController {
-    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserService service;

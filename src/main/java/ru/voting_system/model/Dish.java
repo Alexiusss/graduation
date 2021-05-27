@@ -1,5 +1,6 @@
 package ru.voting_system.model;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -13,13 +14,17 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "restaurant_id", "date"}, name = "dishes_unique_idx")})
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(callSuper = true, exclude = {"restaurant"})
 public class Dish extends AbstractNamedEntity {
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     LocalDate date = LocalDate.now();
 
-    @Column(name ="price", nullable = false)
+    @Column(name = "price", nullable = false)
     @Positive
     private Integer price;
 
@@ -29,10 +34,8 @@ public class Dish extends AbstractNamedEntity {
     @JsonBackReference("dishes")
     private Restaurant restaurant;
 
-    public Dish() {
-    }
 
-    public Dish( String name, @NotNull LocalDate date, @NotNull @Size(min = 1) Integer price, Restaurant restaurant) {
+    public Dish(String name, @NotNull LocalDate date, @NotNull @Size(min = 1) Integer price, Restaurant restaurant) {
         super(null, name);
         this.date = date;
         this.price = price;
@@ -46,37 +49,4 @@ public class Dish extends AbstractNamedEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "date=" + date +
-                ", price=" + price +
-                ", name='" + name + '\'' +
-                ", id=" + id +
-                '}';
-    }
 }

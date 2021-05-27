@@ -1,5 +1,6 @@
 package ru.voting_system.model;
 
+import lombok.*;
 import org.hibernate.Hibernate;
 import ru.voting_system.HasId;
 
@@ -7,7 +8,11 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-//@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE, setterVisibility = NONE)
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public abstract class AbstractBaseEntity implements HasId {
     public static final int START_SEQ = 100000;
 
@@ -16,31 +21,11 @@ public abstract class AbstractBaseEntity implements HasId {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
     protected Integer id;
 
-    protected AbstractBaseEntity() {
-    }
-
-    protected AbstractBaseEntity(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public boolean isNew() {
         return this.id == null;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + ":" + id;
-    }
-
+    //    https://stackoverflow.com/questions/1638723
     @Override
     public boolean equals(Object o) {
         if (this == o) {

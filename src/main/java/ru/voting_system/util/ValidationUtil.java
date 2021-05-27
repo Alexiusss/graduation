@@ -1,13 +1,12 @@
 package ru.voting_system.util;
 
+import lombok.experimental.UtilityClass;
 import ru.voting_system.HasId;
 import ru.voting_system.util.exception.IllegalRequestDataException;
 import ru.voting_system.util.exception.NotFoundException;
 
+@UtilityClass
 public class ValidationUtil {
-
-    private ValidationUtil() {
-    }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
         return checkNotFound(object, "id=" + id);
@@ -29,7 +28,7 @@ public class ValidationUtil {
     }
 
     public static void checkNew(HasId bean) {
-        if (!bean.isNew()){
+        if (!bean.isNew()) {
             throw new IllegalRequestDataException(bean + " must be new (id=null)");
         }
     }
@@ -37,17 +36,17 @@ public class ValidationUtil {
     public static void assureIdConsistent(HasId bean, int id) {
         if (bean.isNew()) {
             bean.setId(id);
-        } else if (bean.getId() != id){
+        } else if (bean.getId() != id) {
             throw new IllegalRequestDataException(bean + " must be with id=" + id);
         }
     }
 
     //  http://stackoverflow.com/a/28565320/548473
-    public static Throwable getRootCause(Throwable t){
+    public static Throwable getRootCause(Throwable t) {
         Throwable result = t;
         Throwable cause;
 
-        while (null != (cause = result.getCause()) && result != cause){
+        while (null != (cause = result.getCause()) && result != cause) {
             result = cause;
         }
         return result;
