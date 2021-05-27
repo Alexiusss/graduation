@@ -42,6 +42,15 @@ class AdminControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getWithMeals() throws Exception {
+        perform(doGet(ADMIN_ID + "/with-votes").basicAuth(ADMIN))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHERS.contentJson(ADMIN));
+    }
+
+    @Test
     void getNotFound() throws Exception {
         perform(doGet(1).basicAuth(ADMIN))
                 .andExpect(status().isUnprocessableEntity())

@@ -40,6 +40,15 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getWithVotes() throws Exception {
+        perform(doGet("/with-votes").basicAuth(USER))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHERS.contentJson(USER));
+    }
+
+    @Test
     void getUnAuth() throws Exception {
         perform(doGet())
                 .andExpect(status().isUnauthorized());

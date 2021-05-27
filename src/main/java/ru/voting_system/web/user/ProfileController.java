@@ -24,6 +24,11 @@ public class ProfileController extends AbstractUserController{
         return super.get(authUser.getId());
     }
 
+    @GetMapping("/with-votes")
+    public User getWithVotes(@AuthenticationPrincipal AuthorizedUser authUser) {
+        return super.getWithVotes(authUser.getId());
+    }
+
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {

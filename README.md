@@ -20,14 +20,14 @@ Each restaurant provides new menu each day.
 As a result, provide a link to github repository. It should contain the code, README.md with API documentation and couple curl commands to test it.
 
 -----------------------------
-##Swagger Api Documentation
+## Swagger Api Documentation
 
 http://localhost:8080/graduation/v2/api-docs  
 
 http://localhost:8080/graduation/swagger-ui.html
 
 -----------------------------
-##CURL commands
+## CURL commands
 
 #### REST API for Users
 
@@ -37,11 +37,17 @@ http://localhost:8080/graduation/swagger-ui.html
 ##### get Users 100001
 `curl -s http://localhost:8080/graduation/admin/users/100001 --user admin@gmail.com:admin`
 
+##### get Users 100001 with votes
+`curl -s http://localhost:8080/graduation/admin/users/100001/with-votes --user admin@gmail.com:admin`
+
 ##### register Users
 `curl -s -i -X POST -d '{"name":"New User","email":"newmail@ya.ru","password":"newPassword"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/graduation/profile/register`
 
 ##### get Profile
 `curl -s http://localhost:8080/graduation/profile --user user@yandex.ru:password`
+
+##### get Profile with votes
+`curl -s http://localhost:8080/graduation/profile/with-votes --user user@yandex.ru:password`
 
 <br>
 

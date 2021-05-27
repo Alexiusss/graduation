@@ -28,6 +28,12 @@ public class AdminController extends AbstractUserController {
         return super.get(id);
     }
 
+    @Override
+    @GetMapping("/{id}/with-votes")
+    public User getWithVotes(@PathVariable int id) {
+        return super.getWithVotes(id);
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         User created = super.create(user);
