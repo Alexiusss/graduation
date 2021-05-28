@@ -30,10 +30,6 @@
         <property name="password" value="${database.password}"/>
     </bean>
 
-<!--    <bean class="org.springframework.beans.factory.config.MethodInvokingBean">-->
-<!--        <property name="staticMethod" value="org.slf4j.bridge.SLF4JBridgeHandler.install" />-->
-<!--    </bean>-->
-
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="dataSource"
           p:packagesToScan="ru.voting_system.**.model">
@@ -68,10 +64,5 @@
 <!--     Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
           p:entityManagerFactory-ref="entityManagerFactory"/>
-
-<!--    <bean id="transactionManager"-->
-<!--          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-<!--        <property name="dataSource" ref="dataSource" />-->
-<!--    </bean>-->
 
 </beans>
